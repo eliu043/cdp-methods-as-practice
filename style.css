@@ -1,0 +1,129 @@
+/* Import Google Fonts - this loads the Roboto font family from Google's servers */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+/* Style the entire body of the webpage */
+body {
+  font-family: 'Roboto', sans-serif;  /* Set the font to Roboto, with sans-serif as backup */
+  background: linear-gradient(135deg, #ff69b4, #ffff00);  /* Gradient from pink to yellow */
+  color: #111;                        /* Set text color to dark gray (almost black) */
+  margin: 0;                          /* Remove default spacing around the body */
+  padding: 0;                         /* Remove default internal spacing */
+  min-height: 100vh;                  /* Ensure gradient covers full viewport height */
+}
+
+/* Style the header section at the top of the page */
+header {
+  display: flex;                      /* Use flexbox layout for flexible positioning */
+  justify-content: space-between;     /* Spread items evenly across the header */
+  align-items: center;                /* Center items vertically */
+  padding: 24px 40px;                 /* Add 24px top/bottom, 40px left/right spacing inside */
+  border-bottom: 1px solid #ccc;      /* Add a light gray line at the bottom */
+  font-size: 14px;                    /* Set font size to 14 pixels */
+}
+
+/* Style the left section of the header */
+header .left {
+  color: #aaa;                        /* Set text color to light gray */
+}
+
+/* Style the center section of the header */
+header .center {
+  font-weight: 400;                   /* Set font weight to normal (not bold) */
+  text-align: center;                 /* Center the text horizontally */
+}
+
+/* Style the span element inside the center section */
+header .center span {
+  font-size: 12px;                    /* Make this text smaller (12 pixels) */
+  color: #888;                        /* Set text color to medium gray */
+}
+
+/* Style links in the right section of the header */
+header .right a {
+  color: #000;                        /* Set link color to black */
+  text-decoration: none;              /* Remove the underline from links */
+  font-weight: 400;                   /* Set font weight to normal */
+}
+
+/* Style the main content area */
+main {
+  max-width: 800px;                   /* Limit the maximum width to 800 pixels */
+  margin: 60px auto;                  /* Add 60px top/bottom margin, center horizontally */
+  padding: 0 20px;                    /* Add 20px left/right padding, no top/bottom */
+}
+
+/* Style the project year/date */
+.project-meta {
+  font-size: 14px;                    /* Set font size to 14 pixels */
+  color: #999;                        /* Set text color to light gray */
+  margin-bottom: 8px;                 /* Add 8 pixels of space below this element */
+}
+
+/* Style the main project title */
+.project-title {
+  font-size: 24px;                    /* Set font size to 24 pixels (larger) */
+  font-weight: 400;                   /* Set font weight to normal (not bold) */
+  margin-bottom: 4px;                 /* Add 4 pixels of space below this element */
+}
+
+/* Style the project subtitle */
+.project-subtitle {
+  font-size: 16px;                    /* Set font size to 16 pixels */
+  color: #999;                        /* Set text color to light gray */
+  margin-bottom: 24px;                /* Add 24 pixels of space below this element */
+}
+
+/* Style the advisor information */
+.advisor {
+  font-size: 14px;                    /* Set font size to 14 pixels */
+  margin-bottom: 40px;                /* Add 40 pixels of space below this element */
+  color: #333;                        /* Set text color to dark gray */
+}
+
+/* Style section titles (like "Abstract", "Motivation") */
+.section-title {
+  font-weight: 700;                   /* Make the text bold */
+  text-transform: uppercase;          /* Convert text to all capital letters */
+  margin-top: 40px;                   /* Add 40 pixels of space above this element */
+  margin-bottom: 12px;                /* Add 12 pixels of space below this element */
+  font-size: 14px;                    /* Set font size to 14 pixels */
+}
+
+/* Style all paragraph elements */
+p {
+  font-size: 16px;                    /* Set font size to 16 pixels */
+  line-height: 1.6;                   /* Set space between lines to 1.6 times the font size */
+  margin-bottom: 24px;                /* Add 24 pixels of space below each paragraph */
+  color: #111;                        /* Set text color to dark gray (almost black) */
+}
+
+/* Style for our interactive button */
+button {
+  background-color: #111;             /* Set button background to dark gray */
+  color: white;                       /* Set button text color to white */
+  border: none;                       /* Remove the default button border */
+  padding: 12px 24px;                 /* Add 12px top/bottom, 24px left/right spacing inside */
+  font-size: 14px;                    /* Set button text size to 14 pixels */
+  font-weight: 400;                   /* Set font weight to normal */
+  cursor: pointer;                    /* Change mouse cursor to hand when hovering over button */
+  margin-bottom: 20px;                /* Add 20 pixels of space below the button */
+  transition: background-color 0.3s;  /* Smooth color change animation (0.3 seconds) */
+  border-radius: 4px;                 /* Add slightly rounded corners to the button */
+}
+
+/* Change button appearance when user hovers over it */
+button:hover {
+  background-color: #333;             /* Change background to lighter gray on hover */
+}
+
+/* Style for the message display area */
+#messageDisplay {
+  font-size: 16px;                    /* Set font size to 16 pixels */
+  line-height: 1.6;                   /* Set space between lines */
+  margin-top: 20px;                   /* Add 20 pixels of space above this element */
+  padding: 16px;                      /* Add 16 pixels of spacing inside the element */
+  border: 1px solid #ccc;             /* Add a light gray border around the element */
+  background-color: #f9f9f9;          /* Set background color to very light gray */
+  border-radius: 4px;                 /* Add slightly rounded corners */
+  min-height: 20px;                   /* Set minimum height so the area is visible even when empty */
+}

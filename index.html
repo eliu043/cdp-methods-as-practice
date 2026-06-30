@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<!-- This tells the browser this is an HTML5 document - always include this at the top -->
+<html lang="en">
+<!-- The html tag is the root element that contains everything on the page -->
+<!-- lang="en" tells the browser this page is in English -->
+
+<head>
+  <!-- The head section contains information about the page, not visible content -->
+  
+  <meta charset="UTF-8">
+  <!-- This sets the character encoding to UTF-8, which supports special characters and emojis -->
+  
+  <title>Module 1</title>
+  <!-- This is the title that appears in the browser tab and bookmarks -->
+  
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <!-- This loads the Roboto font from Google Fonts for use on our page -->
+  
+  <link rel="stylesheet" href="style.css">
+  <!-- This links our CSS file to style the page - the href points to our style.css file -->
+</head>
+
+<body>
+  <!-- The body contains all the visible content that users will see on the page -->
+  
+  <header>
+    <!-- The header is typically used for navigation and site branding -->
+    
+    <div class="left">Columbia GSAPP</div>
+    <!-- This div creates a container for the left side of the header -->
+    <!-- class="left" allows us to style this specific div with CSS -->
+    
+    <div class="center">
+      <!-- This div creates a container for the center of the header -->
+      Computational Design Practices<br>
+      <!-- This is the main text in the center -->
+      <!-- <br> creates a line break, moving the next text to a new line -->
+      <span>Project Archive</span>
+      <!-- span is an inline element that groups text without creating a new line -->
+      <!-- class="center" allows us to style this span differently -->
+    </div>
+    
+    <div class="right"><a href="#">About</a></div>
+    <!-- This div creates a container for the right side of the header -->
+    <!-- <a href="#">About</a> creates a clickable link (currently goes nowhere with #) -->
+  </header>
+
+  <main>
+    <!-- The main tag contains the primary content of the page -->
+    
+    <div class="project-meta">2025</div>
+    <!-- This div displays the year/project metadata -->
+    <!-- class="project-meta" allows us to style this with CSS -->
+    
+    <div class="project-title">Project Title</div>
+    <!-- This div displays the main project title -->
+    <!-- class="project-title" allows us to style this with CSS -->
+    
+    <div class="project-subtitle">Student Name</div>
+    <!-- This div displays the student's name as a subtitle -->
+    <!-- class="project-subtitle" allows us to style this with CSS -->
+    
+    <div class="advisor">Advisor<br><strong>Advisor Name</strong></div>
+    <!-- This div displays advisor information -->
+    <!-- <br> creates a line break -->
+    <!-- <strong> makes the text bold for emphasis -->
+    
+    <div class="section-title">Abstract</div>
+    <!-- This div creates a section heading -->
+    <!-- class="section-title" allows us to style all section titles consistently -->
+    
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+    <!-- <p> creates a paragraph element for text content -->
+    <!-- This is placeholder text (Lorem ipsum) commonly used in web design -->
+    
+    <div class="section-title">Motivation</div>
+    <!-- Another section heading for the Motivation section -->
+    
+    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.</p>
+    <!-- Another paragraph with placeholder text for the Motivation section -->
+    
+    <div class="section-title">Methodology</div>
+    <!-- Section heading for the Methodology section -->
+    
+    <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</p>
+    <!-- Another paragraph with placeholder text for the Methodology section -->
+    
+    <div class="section-title">Interactive Demo</div>
+    <!-- Section heading for our JavaScript demonstration -->
+    
+    <p>Click the button below to see JavaScript in action:</p>
+    <!-- Instructions for the user -->
+    
+    <button id="demoButton">Click Me!</button>
+    <!-- This creates a clickable button -->
+    <!-- id="demoButton" gives this button a unique identifier so JavaScript can find it -->
+    <!-- The text "Click Me!" is what users will see on the button -->
+    
+    <div id="messageDisplay"></div>
+    <!-- This div will be used by JavaScript to show messages -->
+    <!-- id="messageDisplay" gives this div a unique identifier -->
+    <!-- It starts empty but JavaScript will add content to it -->
+  </main>
+  <!-- End of main content area -->
+  
+  <script src="script.js"></script>
+  <!-- This links our JavaScript file to the HTML page -->
+  <!-- The script tag is placed at the end of the body so the HTML loads first -->
+  <!-- src="script.js" tells the browser to load and run our JavaScript file -->
+</body>
+<!-- End of body - all visible content goes above this line -->
+</html>
+<!-- End of HTML document -->
