@@ -289,6 +289,166 @@ h1::selection {
   grid-column: 1 / -1;
 }
 
+.visual-panel {
+  margin-top: 16px;
+}
+
+.visual-panel h2 {
+  margin-bottom: 14px;
+}
+
+.visual-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.visual-grid article {
+  min-height: 210px;
+  padding: 14px;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+}
+
+.visual-grid article:first-child {
+  border-left: 6px solid var(--toy-pink);
+}
+
+.visual-grid article:last-child {
+  border-left: 6px solid var(--toy-blue);
+}
+
+.visual-grid p {
+  margin: 18px 0 0;
+  font-size: 18px;
+  line-height: 1.48;
+}
+
+.context-panel {
+  margin-top: 16px;
+}
+
+.context-panel h2 {
+  margin-bottom: 14px;
+}
+
+.context-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.context-grid article {
+  min-height: 230px;
+  padding: 14px;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+}
+
+.context-grid h3 {
+  margin: 20px 0 10px;
+  font-size: clamp(22px, 2.4vw, 34px);
+  line-height: 1;
+}
+
+.context-grid p {
+  margin-bottom: 0;
+  font-size: 16px;
+  line-height: 1.48;
+}
+
+.context-tag {
+  display: inline-block;
+  padding: 4px 6px;
+  border: 1px solid var(--ink);
+  background: var(--surface);
+  font-family: var(--font-meta);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.context-grid article:nth-child(1) {
+  border-left: 6px solid var(--toy-blue);
+}
+
+.context-grid article:nth-child(2) {
+  border-left: 6px solid var(--toy-pink);
+}
+
+.context-grid article:nth-child(3) {
+  border-left: 6px solid var(--alert-red);
+}
+
+.context-grid article:nth-child(4) {
+  border-left: 6px solid var(--system-green);
+}
+
+.ontology-panel {
+  margin-top: 16px;
+}
+
+.ontology-panel h2 {
+  margin-bottom: 14px;
+}
+
+.ontology-table-wrap {
+  margin-top: 18px;
+  overflow-x: auto;
+  border: 1px solid var(--ink);
+  background: var(--surface);
+}
+
+.ontology-table {
+  width: 100%;
+  min-width: 920px;
+  border-collapse: collapse;
+}
+
+.ontology-table th,
+.ontology-table td {
+  padding: 12px;
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+  vertical-align: top;
+  font-size: 16px;
+  line-height: 1.42;
+}
+
+.ontology-table th {
+  font-weight: 700;
+}
+
+.ontology-table thead th {
+  border-bottom-color: var(--ink);
+  background: var(--soft-gray);
+  font-family: var(--font-meta);
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.ontology-table tbody th {
+  width: 24%;
+  background: var(--paper);
+}
+
+.ontology-table td:nth-child(2) {
+  width: 32%;
+}
+
+.ontology-table tr:last-child th,
+.ontology-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.ontology-table th:last-child,
+.ontology-table td:last-child {
+  border-right: 0;
+}
+
 .source-note {
   margin-top: 18px;
   padding-top: 12px;
@@ -370,6 +530,8 @@ h1::selection {
   .site-footer,
   .dataset-comparison,
   .analysis-grid,
+  .visual-grid,
+  .context-grid,
   .question-list,
   .source-row {
     grid-template-columns: 1fr;
@@ -395,6 +557,60 @@ h1::selection {
 
   .source-row {
     gap: 5px;
+  }
+
+  .ontology-table,
+  .ontology-table thead,
+  .ontology-table tbody,
+  .ontology-table tr,
+  .ontology-table th,
+  .ontology-table td {
+    display: block;
+  }
+
+  .ontology-table {
+    min-width: 0;
+  }
+
+  .ontology-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .ontology-table tr {
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .ontology-table tr:last-child {
+    border-bottom: 0;
+  }
+
+  .ontology-table th,
+  .ontology-table td,
+  .ontology-table tbody th,
+  .ontology-table td:nth-child(2) {
+    width: 100%;
+    border-right: 0;
+  }
+
+  .ontology-table td::before {
+    display: block;
+    margin-bottom: 4px;
+    font-family: var(--font-meta);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .ontology-table td:nth-child(2)::before {
+    content: "Description";
+  }
+
+  .ontology-table td:nth-child(3)::before {
+    content: "How it functions";
   }
 }
 
