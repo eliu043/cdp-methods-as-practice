@@ -1,438 +1,129 @@
-:root {
-  --paper: #f7f5ef;
-  --surface: #ffffff;
-  --ink: #111111;
-  --rule: #b8b8b8;
-  --soft-gray: #e7e7e7;
-  --link-blue: #0000ee;
-  --visited-purple: #551a8b;
-  --toy-blue: #2f6bff;
-  --toy-pink: #ff64c8;
-  --alert-red: #e00022;
-  --data-yellow: #fff35a;
-  --system-green: #23c552;
-  --font-body: Arial, Helvetica, "MS Sans Serif", sans-serif;
-  --font-meta: "Courier New", "Lucida Console", monospace;
-}
+/* Import Google Fonts - this loads the Roboto font family from Google's servers */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
 
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
+/* Style the entire body of the webpage */
 body {
-  min-height: 100vh;
-  margin: 0;
-  color: var(--ink);
-  background: var(--paper);
-  font-family: var(--font-body);
+  font-family: 'Roboto', sans-serif;  /* Set the font to Roboto, with sans-serif as backup */
+  background: linear-gradient(135deg, #ff69b4, #ffff00);  /* Gradient from pink to yellow */
+  color: #111;                        /* Set text color to dark gray (almost black) */
+  margin: 0;                          /* Remove default spacing around the body */
+  padding: 0;                         /* Remove default internal spacing */
+  min-height: 100vh;                  /* Ensure gradient covers full viewport height */
 }
 
-a {
-  color: var(--link-blue);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 2px;
+/* Style the header section at the top of the page */
+header {
+  display: flex;                      /* Use flexbox layout for flexible positioning */
+  justify-content: space-between;     /* Spread items evenly across the header */
+  align-items: center;                /* Center items vertically */
+  padding: 24px 40px;                 /* Add 24px top/bottom, 40px left/right spacing inside */
+  border-bottom: 1px solid #ccc;      /* Add a light gray line at the bottom */
+  font-size: 14px;                    /* Set font size to 14 pixels */
 }
 
-a:visited {
-  color: var(--visited-purple);
+/* Style the left section of the header */
+header .left {
+  color: #aaa;                        /* Set text color to light gray */
 }
 
-a:hover {
-  color: var(--ink);
-  background: var(--data-yellow);
+/* Style the center section of the header */
+header .center {
+  font-weight: 400;                   /* Set font weight to normal (not bold) */
+  text-align: center;                 /* Center the text horizontally */
 }
 
-.site-header,
-.site-footer {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 16px;
-  align-items: center;
-  border-bottom: 1px solid var(--ink);
-  background: var(--surface);
-  font-size: 14px;
+/* Style the span element inside the center section */
+header .center span {
+  font-size: 12px;                    /* Make this text smaller (12 pixels) */
+  color: #888;                        /* Set text color to medium gray */
 }
 
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  min-height: 56px;
-  padding: 10px 18px;
+/* Style links in the right section of the header */
+header .right a {
+  color: #000;                        /* Set link color to black */
+  text-decoration: none;              /* Remove the underline from links */
+  font-weight: 400;                   /* Set font weight to normal */
 }
 
-.site-footer {
-  width: min(1200px, calc(100% - 32px));
-  margin: 0 auto 28px;
-  padding: 12px 0 0;
-  border-top: 1px solid var(--ink);
-  border-bottom: 0;
-  background: transparent;
+/* Style the main content area */
+main {
+  max-width: 800px;                   /* Limit the maximum width to 800 pixels */
+  margin: 60px auto;                  /* Add 60px top/bottom margin, center horizontally */
+  padding: 0 20px;                    /* Add 20px left/right padding, no top/bottom */
 }
 
-.site-mark {
-  font-weight: 700;
+/* Style the project year/date */
+.project-meta {
+  font-size: 14px;                    /* Set font size to 14 pixels */
+  color: #999;                        /* Set text color to light gray */
+  margin-bottom: 8px;                 /* Add 8 pixels of space below this element */
 }
 
-.site-context {
-  display: grid;
-  gap: 2px;
-  text-align: center;
+/* Style the main project title */
+.project-title {
+  font-size: 24px;                    /* Set font size to 24 pixels (larger) */
+  font-weight: 400;                   /* Set font weight to normal (not bold) */
+  margin-bottom: 4px;                 /* Add 4 pixels of space below this element */
 }
 
-.site-context span,
-.panel-meta,
-.record-label,
-.source-type,
-.hero-label,
-.source-note {
-  font-family: var(--font-meta);
-  font-size: 12px;
+/* Style the project subtitle */
+.project-subtitle {
+  font-size: 16px;                    /* Set font size to 16 pixels */
+  color: #999;                        /* Set text color to light gray */
+  margin-bottom: 24px;                /* Add 24 pixels of space below this element */
 }
 
-.site-nav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 12px;
+/* Style the advisor information */
+.advisor {
+  font-size: 14px;                    /* Set font size to 14 pixels */
+  margin-bottom: 40px;                /* Add 40 pixels of space below this element */
+  color: #333;                        /* Set text color to dark gray */
 }
 
-.site-shell {
-  width: min(1200px, calc(100% - 32px));
-  margin: 0 auto;
+/* Style section titles (like "Abstract", "Motivation") */
+.section-title {
+  font-weight: 700;                   /* Make the text bold */
+  text-transform: uppercase;          /* Convert text to all capital letters */
+  margin-top: 40px;                   /* Add 40 pixels of space above this element */
+  margin-bottom: 12px;                /* Add 12 pixels of space below this element */
+  font-size: 14px;                    /* Set font size to 14 pixels */
 }
 
-.hero {
-  min-height: min(760px, calc(100vh - 56px));
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  align-content: end;
-  gap: 18px;
-  padding: 42px 0 28px;
-  border-bottom: 1px solid var(--ink);
-}
-
-.hero-label,
-.panel-meta,
-.record-label,
-.source-type {
-  text-transform: uppercase;
-}
-
-.hero-label {
-  width: fit-content;
-  padding: 5px 7px;
-  border: 1px solid var(--ink);
-  border-left: 6px solid var(--toy-pink);
-  border-right: 6px solid var(--toy-blue);
-  background: var(--surface);
-}
-
-h1,
-h2,
-h3,
+/* Style all paragraph elements */
 p {
-  margin-top: 0;
+  font-size: 16px;                    /* Set font size to 16 pixels */
+  line-height: 1.6;                   /* Set space between lines to 1.6 times the font size */
+  margin-bottom: 24px;                /* Add 24 pixels of space below each paragraph */
+  color: #111;                        /* Set text color to dark gray (almost black) */
 }
 
-h1 {
-  max-width: 10ch;
-  margin-bottom: 0;
-  font-size: clamp(68px, 14vw, 176px);
-  font-weight: 700;
-  line-height: 0.82;
-  letter-spacing: 0;
-  text-transform: uppercase;
+/* Style for our interactive button */
+button {
+  background-color: #111;             /* Set button background to dark gray */
+  color: white;                       /* Set button text color to white */
+  border: none;                       /* Remove the default button border */
+  padding: 12px 24px;                 /* Add 12px top/bottom, 24px left/right spacing inside */
+  font-size: 14px;                    /* Set button text size to 14 pixels */
+  font-weight: 400;                   /* Set font weight to normal */
+  cursor: pointer;                    /* Change mouse cursor to hand when hovering over button */
+  margin-bottom: 20px;                /* Add 20 pixels of space below the button */
+  transition: background-color 0.3s;  /* Smooth color change animation (0.3 seconds) */
+  border-radius: 4px;                 /* Add slightly rounded corners to the button */
 }
 
-.hero-thesis {
-  max-width: 980px;
-  margin-bottom: 0;
-  font-size: clamp(25px, 3.45vw, 46px);
-  font-weight: 700;
-  line-height: 0.98;
+/* Change button appearance when user hovers over it */
+button:hover {
+  background-color: #333;             /* Change background to lighter gray on hover */
 }
 
-.hero-thesis::selection,
-h1::selection {
-  background: var(--toy-pink);
-}
-
-.hero-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.hero-links a {
-  display: inline-flex;
-  min-height: 36px;
-  align-items: center;
-  padding: 7px 10px;
-  border: 1px solid var(--ink);
-  background: var(--surface);
-  font-weight: 700;
-}
-
-.hero-links a:nth-child(2) {
-  border-color: var(--toy-blue);
-}
-
-.hero-links a:nth-child(3) {
-  border-color: var(--toy-pink);
-}
-
-.archive-panel,
-.dataset-record,
-.bibliography {
-  border: 1px solid var(--ink);
-  background: var(--surface);
-}
-
-.archive-panel {
-  padding: 20px;
-}
-
-.archive-panel h2,
-.bibliography-heading h2 {
-  max-width: 940px;
-  margin-bottom: 14px;
-  font-size: clamp(28px, 4vw, 52px);
-  line-height: 0.98;
-}
-
-.archive-panel p,
-.bibliography-heading p,
-.dataset-record p,
-.source-row,
-.question-list li {
-  font-size: 17px;
-  line-height: 1.48;
-}
-
-.archive-panel p:last-child,
-.dataset-record p:last-child,
-.bibliography-heading p:last-child {
-  margin-bottom: 0;
-}
-
-.panel-meta {
-  margin-bottom: 14px;
-  color: var(--alert-red);
-}
-
-#argument {
-  margin-top: 16px;
-}
-
-.dataset-comparison {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin-top: 16px;
-  border-top: 1px solid var(--ink);
-  border-bottom: 1px solid var(--ink);
-}
-
-.dataset-record {
-  min-height: 270px;
-  padding: 18px;
-  border-top: 0;
-  border-bottom: 0;
-}
-
-.dataset-record + .dataset-record {
-  border-left: 0;
-}
-
-.dataset-record h2 {
-  margin: 42px 0 14px;
-  font-size: clamp(28px, 4vw, 56px);
-  line-height: 0.94;
-}
-
-.dataset-girls {
-  border-left: 8px solid var(--toy-pink);
-}
-
-.dataset-boys {
-  border-left: 8px solid var(--toy-blue);
-}
-
-.record-label {
-  display: inline-block;
-  padding: 4px 6px;
-  border: 1px solid var(--ink);
-  background: var(--surface);
-}
-
-.dataset-girls .record-label {
-  background: color-mix(in srgb, var(--toy-pink) 24%, white);
-}
-
-.dataset-boys .record-label {
-  background: color-mix(in srgb, var(--toy-blue) 20%, white);
-}
-
-.analysis-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  margin-top: 16px;
-}
-
-.analysis-grid .wide {
-  grid-column: 1 / -1;
-}
-
-.source-note {
-  margin-top: 18px;
-  padding-top: 12px;
-  border-top: 1px solid var(--rule);
-  color: #3f3f3f;
-}
-
-.question-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px 16px;
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-.question-list li {
-  padding: 12px;
-  border: 1px solid var(--rule);
-  background: var(--paper);
-}
-
-.bibliography {
-  margin-top: 16px;
-  margin-bottom: 44px;
-}
-
-.bibliography-heading {
-  padding: 20px;
-  border-bottom: 1px solid var(--ink);
-}
-
-.source-table {
-  display: grid;
-}
-
-.source-row {
-  display: grid;
-  grid-template-columns: 150px minmax(0, 1.1fr) minmax(0, 1.35fr);
-  gap: 14px;
-  padding: 12px 14px;
-  border-bottom: 1px solid var(--rule);
-}
-
-.source-row:last-child {
-  border-bottom: 0;
-}
-
-.source-row:hover {
-  background: var(--soft-gray);
-}
-
-.artist-source {
-  border-left: 6px solid var(--toy-pink);
-}
-
-.artist-source:nth-child(2) {
-  border-left-color: var(--toy-blue);
-}
-
-.press-source {
-  border-left: 6px solid transparent;
-}
-
-.source-type {
-  font-weight: 700;
-}
-
-.site-footer span {
-  justify-self: start;
-}
-
-.site-footer a {
-  justify-self: center;
-}
-
-@media (max-width: 880px) {
-  .site-header,
-  .site-footer,
-  .dataset-comparison,
-  .analysis-grid,
-  .question-list,
-  .source-row {
-    grid-template-columns: 1fr;
-  }
-
-  .site-context {
-    text-align: left;
-  }
-
-  .site-nav {
-    justify-content: flex-start;
-  }
-
-  .hero {
-    min-height: auto;
-    padding: 42px 0 26px;
-  }
-
-  .dataset-record + .dataset-record {
-    border-top: 1px solid var(--ink);
-    border-left: 1px solid var(--ink);
-  }
-
-  .source-row {
-    gap: 5px;
-  }
-}
-
-@media (max-width: 540px) {
-  .site-header {
-    position: static;
-  }
-
-  .site-shell,
-  .site-footer {
-    width: min(100% - 20px, 1200px);
-  }
-
-  h1 {
-    font-size: clamp(64px, 23vw, 116px);
-  }
-
-  .hero-thesis {
-    font-size: 27px;
-  }
-
-  .archive-panel,
-  .dataset-record,
-  .bibliography-heading {
-    padding: 14px;
-  }
-
-  .archive-panel p,
-  .bibliography-heading p,
-  .dataset-record p,
-  .source-row,
-  .question-list li {
-    font-size: 16px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+/* Style for the message display area */
+#messageDisplay {
+  font-size: 16px;                    /* Set font size to 16 pixels */
+  line-height: 1.6;                   /* Set space between lines */
+  margin-top: 20px;                   /* Add 20 pixels of space above this element */
+  padding: 16px;                      /* Add 16 pixels of spacing inside the element */
+  border: 1px solid #ccc;             /* Add a light gray border around the element */
+  background-color: #f9f9f9;          /* Set background color to very light gray */
+  border-radius: 4px;                 /* Add slightly rounded corners */
+  min-height: 20px;                   /* Set minimum height so the area is visible even when empty */
 }
