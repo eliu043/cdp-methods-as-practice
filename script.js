@@ -1,69 +1,24 @@
-// Progressive scroll reveals. Content remains visible when JavaScript is
-// unavailable and motion is disabled for visitors who request reduced motion.
-
 document.addEventListener('DOMContentLoaded', function () {
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduceMotion) return;
+  var buckets = Array.prototype.slice.call(document.querySelectorAll('.bucket'));
+  var expandAll = document.getElementById('expandAll');
+  var collapseAll = document.getElementById('collapseAll');
 
-  var selectors = [
-    'main > section:not(.hero)',
-    'main > figure',
-    '.visual-media-grid figure',
-    '.visual-block',
-    '.lens-item',
-    '.argument-list li',
-    '.context-event',
-    '.context-event-media',
-    '.contemporaries-card',
-    '.ontology-node',
-    '.ontology-detail',
-    '.source-row',
-    '.sort-tally > div'
-  ];
-
-  var items = Array.prototype.slice.call(document.querySelectorAll(selectors.join(',')));
-  document.documentElement.classList.add('reveal-enabled');
-
-  items.forEach(function (item) {
-    item.classList.add('scroll-reveal');
-
-    var siblings = item.parentElement
-      ? Array.prototype.filter.call(item.parentElement.children, function (child) {
-          return items.indexOf(child) !== -1;
-        })
-      : [];
-    var siblingIndex = siblings.indexOf(item);
-    if (siblingIndex > 0) {
-      item.style.setProperty('--reveal-delay', Math.min(siblingIndex, 5) * 70 + 'ms');
-    }
+  expandAll.addEventListener('click', function () {
+    buckets.forEach(function (bucket) { bucket.open = true; });
   });
 
-  var pending = items.slice();
-  var frame = null;
+  collapseAll.addEventListener('click', function () {
+    buckets.forEach(function (bucket) { bucket.open = false; });
+  });
 
-  function revealVisibleItems() {
-    frame = null;
-    var revealLine = window.innerHeight * 0.93;
-
-    pending = pending.filter(function (item) {
-      var bounds = item.getBoundingClientRect();
-      var isVisible = bounds.top < revealLine && bounds.bottom > 0;
-      if (isVisible) item.classList.add('is-revealed');
-      return !isVisible;
+  document.querySelectorAll('.add-note').forEach(function (button) {
+    button.addEventListener('click', function () {
+      var content = button.closest('.bucket-content');
+      var note = document.createElement('p');
+      note.className = 'note';
+      note.textContent = 'Working entry placeholder — ready for a source, thought, precedent, or question.';
+      content.insertBefore(note, button);
+      button.textContent = '+ Add another note';
     });
-
-    if (!pending.length) {
-      window.removeEventListener('scroll', requestRevealCheck);
-      window.removeEventListener('resize', requestRevealCheck);
-    }
-  }
-
-  function requestRevealCheck() {
-    if (frame !== null) return;
-    frame = window.requestAnimationFrame(revealVisibleItems);
-  }
-
-  window.addEventListener('scroll', requestRevealCheck, { passive: true });
-  window.addEventListener('resize', requestRevealCheck);
-  requestRevealCheck();
+  });
 });
