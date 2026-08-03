@@ -63,12 +63,23 @@
             <h2>Prediction becomes material through translation.</h2>
             <p class="lead">How do institutions translate uncertain futures into sites and commitments?</p>
           </div>
-          <div class="translation-network" id="translationNetwork" aria-label="Network showing four institutional translations acting upon one proposed site">
+          <div class="translation-network" id="translationNetwork" aria-label="Network separating four translation categories, processes, and actor-instrument pairs around one proposed site">
             <canvas aria-hidden="true"></canvas>
-            <article class="network-node node-forecast" data-node="forecast" tabindex="0"><span>Forecast</span><h3>Projection → obligation</h3><p>Planning agency · forecast</p></article>
-            <article class="network-node node-property" data-node="property" tabindex="0"><span>Property</span><h3>Boundary → value</h3><p>Surveyor · plat</p></article>
-            <article class="network-node node-capacity" data-node="capacity" tabindex="0"><span>Capacity</span><h3>Resource → promise</h3><p>Utility · service agreement</p></article>
-            <article class="network-node node-suitability" data-node="suitability" tabindex="0"><span>Suitability</span><h3>Terrain → selection</h3><p>Consultant · model</p></article>
+            <div class="network-node network-title forecast-title" data-node="forecast-title" tabindex="0">Forecast</div>
+            <div class="network-node network-process forecast-process" data-node="forecast-process" tabindex="0"><span>Projection</span><i>→</i><span>obligation</span></div>
+            <div class="network-node network-actor forecast-actor" data-node="forecast-actor" tabindex="0"><span>Planning agency</span><small>forecast</small></div>
+
+            <div class="network-node network-title property-title" data-node="property-title" tabindex="0">Property</div>
+            <div class="network-node network-process property-process" data-node="property-process" tabindex="0"><span>Boundary</span><i>→</i><span>value</span></div>
+            <div class="network-node network-actor property-actor" data-node="property-actor" tabindex="0"><span>Surveyor</span><small>plat</small></div>
+
+            <div class="network-node network-title capacity-title" data-node="capacity-title" tabindex="0">Capacity</div>
+            <div class="network-node network-process capacity-process" data-node="capacity-process" tabindex="0"><span>Resource</span><i>→</i><span>promise</span></div>
+            <div class="network-node network-actor capacity-actor" data-node="capacity-actor" tabindex="0"><span>Utility</span><small>service agreement</small></div>
+
+            <div class="network-node network-title suitability-title" data-node="suitability-title" tabindex="0">Suitability</div>
+            <div class="network-node network-process suitability-process" data-node="suitability-process" tabindex="0"><span>Terrain</span><i>→</i><span>selection</span></div>
+            <div class="network-node network-actor suitability-actor" data-node="suitability-actor" tabindex="0"><span>Consultant</span><small>model</small></div>
             <div class="network-center" data-node="site" tabindex="0"><span>Shared object</span><strong>One proposed site</strong><small>parcel · corridor · interconnection</small></div>
           </div>
           <div class="translation-footer">

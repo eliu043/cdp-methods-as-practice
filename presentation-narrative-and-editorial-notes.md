@@ -66,7 +66,7 @@ Do not claim that Easterling writes directly about prediction markets. Her role 
 
 **Time:** 1:25–2:20
 
-**Visual role:** The network is the project’s analytical diagram. Four institutional translations converge on one shared site while the outer connections make circular causality visible.
+**Visual role:** The network is the project’s analytical diagram. Each translation separates category, process, and actor/instrument into linked nodes; the four branches converge on one shared site while the outer connections make circular causality visible.
 
 ### Script
 
@@ -80,7 +80,7 @@ At every turn, authority is redistributed. Who produces the forecast? Who can ac
 
 ### Editorial note
 
-Let the network carry the causal structure. Pause after the main question, move through the four terms quickly, and read the bottom actor question aloud. The agent and instrument labels are anchors, not four additional explanations.
+Let the network carry the causal structure. Pause after the main question, then follow one branch from category to process to actor/instrument before moving quickly through the other three. Read the bottom actor question aloud rather than narrating every node.
 
 ---
 

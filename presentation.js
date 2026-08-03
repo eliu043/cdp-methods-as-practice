@@ -211,14 +211,22 @@
     const canvas = translationNetwork.querySelector('canvas');
     const nodes = [...translationNetwork.querySelectorAll('[data-node]')];
     const edges = [
-      {from:'forecast',to:'site',bend:-18},
-      {from:'property',to:'site',bend:18},
-      {from:'capacity',to:'site',bend:18},
-      {from:'suitability',to:'site',bend:-18},
-      {from:'forecast',to:'property',bend:-34,feedback:true},
-      {from:'property',to:'suitability',bend:-26,feedback:true},
-      {from:'suitability',to:'capacity',bend:-34,feedback:true},
-      {from:'capacity',to:'forecast',bend:-26,feedback:true}
+      {from:'forecast-title',to:'forecast-process',bend:-8},
+      {from:'forecast-actor',to:'forecast-process',bend:8},
+      {from:'forecast-process',to:'site',bend:-12},
+      {from:'property-title',to:'property-process',bend:8},
+      {from:'property-actor',to:'property-process',bend:-8},
+      {from:'property-process',to:'site',bend:12},
+      {from:'capacity-title',to:'capacity-process',bend:8},
+      {from:'capacity-actor',to:'capacity-process',bend:-8},
+      {from:'capacity-process',to:'site',bend:12},
+      {from:'suitability-title',to:'suitability-process',bend:-8},
+      {from:'suitability-actor',to:'suitability-process',bend:8},
+      {from:'suitability-process',to:'site',bend:-12},
+      {from:'forecast-process',to:'property-process',bend:-38,feedback:true},
+      {from:'property-process',to:'suitability-process',bend:-30,feedback:true},
+      {from:'suitability-process',to:'capacity-process',bend:-38,feedback:true},
+      {from:'capacity-process',to:'forecast-process',bend:-30,feedback:true}
     ];
 
     function drawTranslationNetwork(active = null) {
