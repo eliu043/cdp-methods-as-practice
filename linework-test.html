@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A live study of architectural linework and toon rendering for Lots in Commons.">
+  <title>Linework Study — Lots in Commons</title>
+  <link rel="stylesheet" href="linework-test.css">
+</head>
+<body>
+  <header class="study-header">
+    <a class="wordmark" href="index.html">
+      <span>Lots in Commons</span>
+      <small>Visual methods study / 01</small>
+    </a>
+    <p class="header-note">A model treated as a drawing, not an object.</p>
+    <a class="close-link" href="index.html" aria-label="Return to presentation">Close <span aria-hidden="true">↗</span></a>
+  </header>
+
+  <main class="study-shell">
+    <section class="stage" aria-labelledby="study-title">
+      <canvas id="lineworkCanvas" aria-label="Rotating 3D model rendered as weighted architectural linework"></canvas>
+
+      <div class="stage-copy">
+        <p class="eyebrow">Drawing engine / live model</p>
+        <h1 id="study-title">Line carries<br>the argument.</h1>
+        <p class="lede">A real-time test of silhouette, crease, tone, and projection. The model remains spatial; its image behaves like an analytical drawing.</p>
+      </div>
+
+      <div class="model-status" id="modelStatus" role="status" aria-live="polite">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span>Loading model</span>
+      </div>
+
+      <div class="orientation-mark" aria-hidden="true">
+        <span>N</span>
+        <i></i>
+      </div>
+
+      <p class="stage-caption"><span>Fig. 01</span> Exterior profile, material edge, and tonal field are rendered as separate systems.</p>
+    </section>
+
+    <aside class="control-panel" aria-label="Linework controls">
+      <div class="panel-heading">
+        <p>Drawing specification</p>
+        <button class="text-button" id="resetView" type="button">Reset view</button>
+      </div>
+
+      <fieldset>
+        <legend>Surface</legend>
+        <div class="segmented" role="group" aria-label="Surface treatment">
+          <button type="button" data-surface="toon" class="is-active" aria-pressed="true">Tonal</button>
+          <button type="button" data-surface="ghost" aria-pressed="false">Ghost</button>
+          <button type="button" data-surface="line" aria-pressed="false">Line only</button>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Projection</legend>
+        <div class="segmented" role="group" aria-label="Camera projection">
+          <button type="button" data-projection="orthographic" class="is-active" aria-pressed="true">Orthographic</button>
+          <button type="button" data-projection="perspective" aria-pressed="false">Perspective</button>
+        </div>
+      </fieldset>
+
+      <fieldset class="slider-group">
+        <legend>Line hierarchy</legend>
+        <label>
+          <span>Profile weight <output id="profileValue">3</output></span>
+          <input id="profileWeight" type="range" min="0" max="6" value="3" step="0.1">
+        </label>
+        <label>
+          <span>Crease weight <output id="creaseValue">1</output></span>
+          <input id="creaseWeight" type="range" min="0.2" max="3" value="1" step="0.1">
+        </label>
+        <label>
+          <span>Edge threshold <output id="thresholdValue">5°</output></span>
+          <input id="edgeThreshold" type="range" min="1" max="80" value="5" step="1">
+        </label>
+        <label>
+          <span>Rotation speed <output id="speedValue">0.35</output></span>
+          <input id="rotationSpeed" type="range" min="0" max="1.2" value="0.35" step="0.05">
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Paper</legend>
+        <div class="swatches" role="group" aria-label="Paper color">
+          <button type="button" class="swatch is-active" data-paper="ivory" aria-label="Ivory paper" aria-pressed="true"><span></span></button>
+          <button type="button" class="swatch" data-paper="blue" aria-label="Blueprint" aria-pressed="false"><span></span></button>
+          <button type="button" class="swatch" data-paper="black" aria-label="Black field" aria-pressed="false"><span></span></button>
+        </div>
+      </fieldset>
+
+      <div class="toggle-row">
+        <span>Automatic rotation</span>
+        <button class="toggle is-on" id="autoRotate" type="button" role="switch" aria-checked="true"><i></i></button>
+      </div>
+
+      <div class="reading-key" aria-label="Drawing legend">
+        <p><span class="key-line profile"></span><b>Profile</b><small>view dependent</small></p>
+        <p><span class="key-line crease"></span><b>Crease</b><small>geometry dependent</small></p>
+        <p><span class="key-tone"></span><b>Tone</b><small>light dependent</small></p>
+      </div>
+    </aside>
+  </main>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module" src="linework-test.js"></script>
+</body>
+</html>

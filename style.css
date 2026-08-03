@@ -76,6 +76,8 @@ footer { position: relative; z-index: 1; }
   cursor: pointer;
 }
 .view-tools a::after { content: " ↘"; color: var(--accent); }
+.view-tools .projection-mark { font-size:16px; line-height:10px; text-decoration:none; }
+.view-tools .projection-mark::after { content:""; }
 .view-tools a:hover,
 .view-tools a:focus-visible,
 .view-tools button:hover,

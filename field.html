@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A spatial research field for Lots in Commons">
+  <title>Lots in Commons — Field</title>
+  <link rel="stylesheet" href="field.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="site-title" href="index.html"><span>Lots in Commons</span><em>Research field</em></a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="index.html">Presentation</a>
+      <a class="is-active" href="field.html" aria-current="page">Field</a>
+      <a href="archive.html">Index</a>
+      <a class="projection-mark" href="projection.html" aria-label="Projection study" title="Projection study">◉</a>
+    </nav>
+  </header>
+  <main class="field-viewport" id="fieldViewport" aria-label="Pannable research field">
+    <div class="field-world" id="fieldWorld"></div>
+  </main>
+  <aside class="field-tools" aria-label="Canvas controls">
+    <button type="button" id="zoomOut" aria-label="Zoom out">−</button>
+    <output id="zoomLevel" aria-live="polite">40%</output>
+    <button type="button" id="zoomIn" aria-label="Zoom in">+</button>
+    <button type="button" id="fitField">Fit</button>
+    <button type="button" id="resetCards">Reset cards</button>
+  </aside>
+  <p class="field-instruction">Drag the field to pan · drag a card to rearrange · scroll to zoom</p>
+  <script src="field.js"></script>
+</body>
+</html>

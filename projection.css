@@ -1,0 +1,56 @@
+:root {
+  --black: #060707;
+  --paper: #f4f3ef;
+  --signal: #d8ff2f;
+  --muted: rgba(244, 243, 239, .52);
+  --line: rgba(244, 243, 239, .22);
+  --pad: clamp(18px, 2.4vw, 42px);
+}
+* { box-sizing: border-box; }
+html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+body { background: var(--black); color: var(--paper); font-family: Helvetica, Arial, sans-serif; }
+a { color: inherit; }
+button, select { font: inherit; }
+.projection-header { position: fixed; z-index: 20; top: 0; right: 0; left: 0; display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: start; padding: 17px var(--pad); color: var(--muted); font-size: 10px; letter-spacing: .055em; text-transform: uppercase; }
+.projection-header > a { justify-self: start; text-decoration: none; color: var(--paper); }
+.projection-header p { justify-self: center; margin: 0; }
+.projection-header nav { display: flex; justify-self: end; align-items: center; gap: 17px; }
+.projection-header nav a { text-decoration: none; }
+.projection-header nav a:hover, .projection-header nav .is-active { color: var(--paper); }
+.projection-mark { font-size: 16px; line-height: 10px; }
+.projection-stage { position: relative; width: 100vw; height: 100vh; background: var(--black); }
+.panel-registration { position: absolute; z-index: 1; inset: clamp(84px, 10vh, 116px) var(--pad) clamp(82px, 10vh, 112px); display: flex; justify-content: center; align-items: center; gap: clamp(14px, 2.2vw, 42px); pointer-events: none; }
+.drawing-field, .map-field { width: min(27vw, 36vh); aspect-ratio: 1 / 2; max-height: 72vh; }
+.drawing-field { position: relative; background: #fff; box-shadow: 0 0 0 1px rgba(255,255,255,.13); transition: background 240ms ease, box-shadow 240ms ease; }
+.drawing-field span { position: absolute; bottom: 10px; left: 12px; color: rgba(0,0,0,.31); font-size: 8px; letter-spacing: .07em; text-transform: uppercase; }
+.map-field { border: 1px solid rgba(255,255,255,.1); }
+.output-mode .drawing-field { background: var(--black); box-shadow: 0 0 0 1px rgba(255,255,255,.07); }
+.output-mode .drawing-field span { display: none; }
+.canvas-mount, .canvas-mount canvas { position: absolute !important; z-index: 2; inset: 0; display: block; }
+.canvas-mount { pointer-events: none; }
+.projection-caption { position: fixed; z-index: 12; left: var(--pad); bottom: 28px; max-width: 390px; pointer-events: none; }
+.projection-caption p { margin: 0 0 6px; font-size: 10px; line-height: 1.35; }
+.projection-caption p:first-child { text-transform: uppercase; letter-spacing: .06em; }
+.projection-caption span { display: inline-block; min-width: 25px; color: var(--signal); }
+.projection-caption strong { font-weight: 400; }
+.projection-caption p:last-child { max-width: 42ch; color: var(--muted); }
+.projection-controls { position: fixed; z-index: 24; right: var(--pad); bottom: 26px; display: flex; align-items: center; gap: 8px; transition: opacity 160ms ease; }
+.projection-controls button, .projection-controls label { min-height: 31px; border: 1px solid var(--line); background: rgba(6,7,7,.82); color: var(--paper); font-size: 9px; letter-spacing: .045em; text-transform: uppercase; }
+.projection-controls button { padding: 0 11px; cursor: pointer; }
+.projection-controls button:hover { border-color: var(--paper); }
+.projection-controls label { display: flex; align-items: center; gap: 8px; padding-left: 11px; }
+.projection-controls select { height: 29px; border: 0; border-left: 1px solid var(--line); background: transparent; color: inherit; padding: 0 22px 0 8px; font-size: 9px; }
+.projection-controls p { position: absolute; right: 0; bottom: -17px; width: 100%; margin: 0; color: var(--muted); font-size: 8px; text-align: right; }
+.controls-hidden .projection-controls, .controls-hidden .projection-help { opacity: 0; pointer-events: none; }
+.projection-help { position: fixed; z-index: 20; top: 54px; right: var(--pad); margin: 0; color: var(--muted); font-size: 8px; letter-spacing: .05em; text-transform: uppercase; }
+@media (max-width: 760px) {
+  .projection-header { grid-template-columns: 1fr auto; }
+  .projection-header p { display: none; }
+  .projection-header nav a:not(.projection-mark) { display: none; }
+  .panel-registration { gap: 10px; }
+  .drawing-field, .map-field { width: min(43vw, 34vh); }
+  .projection-controls { left: var(--pad); right: var(--pad); flex-wrap: wrap; }
+  .projection-controls label { display: none; }
+  .projection-caption { bottom: 108px; }
+}
+@media (prefers-reduced-motion: reduce) { .drawing-field { transition: none; } }

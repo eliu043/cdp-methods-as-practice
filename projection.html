@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="An interactive projection study for Lots in Commons.">
+  <title>The Forecast Has Entered the Ground — Lots in Commons</title>
+  <link rel="stylesheet" href="projection.css">
+</head>
+<body>
+  <header class="projection-header">
+    <a href="index.html">Lots in Commons</a>
+    <p>The Forecast Has Entered the Ground</p>
+    <nav aria-label="Primary navigation">
+      <a href="index.html">Presentation</a>
+      <a href="field.html">Field</a>
+      <a href="archive.html">Index</a>
+      <a class="projection-mark is-active" href="projection.html" aria-current="page" aria-label="Projection study" title="Projection study">◉</a>
+    </nav>
+  </header>
+
+  <main id="projectionStage" class="projection-stage preview-mode">
+    <div class="panel-registration" aria-hidden="true">
+      <div id="drawingField" class="drawing-field"><span>36 × 72 in drawing field</span></div>
+      <div id="mapField" class="map-field"></div>
+    </div>
+    <div id="canvasMount" class="canvas-mount" aria-hidden="true"></div>
+
+    <section class="projection-caption" aria-label="Current projection state">
+      <p><span id="stateIndex">00</span> <strong id="stateName">Evidence remains unresolved</strong></p>
+      <p id="stateDetail">Move vertically to test proximity, or begin local camera sensing.</p>
+    </section>
+
+    <aside class="projection-controls" aria-label="Projection controls">
+      <button id="cameraToggle" type="button">Begin local sensing</button>
+      <button id="outputToggle" type="button" aria-pressed="false">Installation output</button>
+      <label>Spectrum
+        <select id="spectrumSelect">
+          <option value="auto">Auto sequence</option>
+          <option value="visible">Visible</option>
+          <option value="nir">Near infrared</option>
+          <option value="thermal">Thermal</option>
+          <option value="moisture">Moisture index</option>
+        </select>
+      </label>
+      <p id="sensorStatus">Camera off · pointer is the proximity input</p>
+    </aside>
+    <p class="projection-help">P preview/output · H controls · F fullscreen</p>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.11.10/lib/p5.min.js"></script>
+  <script src="projection.js"></script>
+</body>
+</html>
