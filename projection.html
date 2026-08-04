@@ -27,25 +27,20 @@
     <div id="canvasMount" class="canvas-mount" aria-hidden="true"></div>
 
     <section class="projection-caption" aria-label="Current projection state">
-      <p><span id="stateIndex">00</span> <strong id="stateName">Evidence remains unresolved</strong></p>
-      <p id="stateDetail">Move vertically to test proximity, or begin local camera sensing.</p>
+      <p><span id="stateIndex">01</span> <strong id="stateName">Texas bluegrass</strong></p>
+      <p id="stateDetail">A dense spatial sample reveals depth through a slowly moving virtual camera.</p>
+      <div id="filmTimeline" class="film-timeline" aria-label="Film timeline"></div>
     </section>
 
     <aside class="projection-controls" aria-label="Projection controls">
-      <button id="cameraToggle" type="button">Begin local sensing</button>
+      <button id="previousScene" type="button" aria-label="Previous scene">← Scene</button>
+      <button id="playToggle" type="button" aria-pressed="true">Pause film</button>
+      <button id="nextScene" type="button" aria-label="Next scene">Scene →</button>
+      <button id="cameraToggle" type="button">Begin movement sensing</button>
       <button id="outputToggle" type="button" aria-pressed="false">Installation output</button>
-      <label>Spectrum
-        <select id="spectrumSelect">
-          <option value="auto">Auto sequence</option>
-          <option value="visible">Visible</option>
-          <option value="nir">Near infrared</option>
-          <option value="thermal">Thermal</option>
-          <option value="moisture">Moisture index</option>
-        </select>
-      </label>
-      <p id="sensorStatus">Camera off · pointer is the proximity input</p>
+      <p id="sensorStatus">Camera off · pointer movement disturbs transmission</p>
     </aside>
-    <p class="projection-help">P preview/output · H controls · F fullscreen</p>
+    <p class="projection-help">Space play/pause · ←/→ scenes · P preview/output · H controls · F fullscreen</p>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/p5@1.11.10/lib/p5.min.js"></script>
