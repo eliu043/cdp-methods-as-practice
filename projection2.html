@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Forecast Has Entered the Ground — an interactive projection for Lots in Commons.">
+  <title>The Forecast Has Entered the Ground</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    html, body {
+      width: 100%; height: 100%; margin: 0; overflow: hidden;
+      background: #000;
+    }
+    body { font-family: Helvetica, Arial, sans-serif; }
+    main, #installation {
+      width: 100vw; height: 100vh;
+      display: grid; place-items: center;
+    }
+    canvas {
+      display: block;
+      max-width: none; max-height: none;
+      width: auto !important; height: 100vh !important;
+      image-rendering: pixelated;
+    }
+    /* Keep webcam frames advancing without placing the video in the work. */
+    #handCamera {
+      position: fixed; left: 0; top: 0; z-index: -1;
+      width: 2px; height: 2px; opacity: .001; pointer-events: none;
+    }
+    .camera-controls {
+      position: fixed; left: 14px; bottom: 14px; z-index: 100;
+      opacity: .28; transition: opacity 180ms ease;
+    }
+    .camera-controls:hover, .camera-controls:focus-within { opacity: 1; }
+    .camera-controls button {
+      min-height: 28px; padding: 0 10px;
+      border: 1px solid rgba(244,243,239,.35); border-radius: 16px;
+      background: rgba(0,0,0,.72); color: rgba(244,243,239,.78);
+      font: 9px Helvetica, Arial, sans-serif; cursor: pointer;
+    }
+    .camera-controls button:hover { border-color: #f4f3ef; color: #f4f3ef; }
+    body.hud-hidden .camera-controls { display: none; }
+  </style>
+</head>
+<body>
+  <main>
+    <div id="installation" aria-label="The Forecast Has Entered the Ground interactive projection"></div>
+  </main>
+  <div class="camera-controls">
+    <button id="cameraToggle" type="button">Start hand tracking</button>
+  </div>
+  <video id="handCamera" playsinline muted autoplay></video>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.11.10/lib/p5.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/hands.js"></script>
+  <script src="sketch.js"></script>
+</body>
+</html>

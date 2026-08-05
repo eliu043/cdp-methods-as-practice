@@ -109,6 +109,7 @@ button { font:inherit; }
 .knowledge-pair p { margin:25px 0 0; font-size:12px; line-height:1.4; }
 .alchemy-line { position:absolute; left:0; bottom:0; width:34%; padding-top:9px; border-top:1px solid var(--ink); }
 .alchemy-line p { margin:7px 0 0; font-family:Georgia,'Times New Roman',serif; font-size:13px; font-style:italic; line-height:1.32; }
+.alchemy-bridge { margin-top:14px!important; padding-top:10px; border-top:1px solid var(--ink); font-family:Helvetica,Arial,sans-serif!important; font-size:11px!important; font-style:normal!important; color:var(--muted); line-height:1.4!important; }
 .knowledge-collage { position:absolute; inset:2% 0 0 41%; }
 .knowledge-collage figure,.knowledge-collage a { position:absolute; display:block; margin:0; background:#fff; box-shadow:0 12px 30px rgba(0,0,0,.07); text-decoration:none; }
 .knowledge-collage img { display:block; width:100%; object-fit:cover; }
@@ -116,14 +117,10 @@ button { font:inherit; }
 .knowledge-collage a strong { color:var(--ink); font-size:10px; font-weight:400; }
 .material-mine { right:0; top:0; z-index:1; width:min(27vw,410px); }
 .material-mine img { aspect-ratio:1.5/1; filter:saturate(.68); }
-.material-vessels { left:2%; bottom:0; z-index:3; width:min(13vw,200px); }
-.material-vessels img { aspect-ratio:1.25/1; filter:saturate(.72); }
 .book-ref { z-index:6; width:min(9vw,142px); }
 .book-ref img { aspect-ratio:2/3; }
 .book-haraway { left:0; top:17%; }
 .book-tsing { left:34%; bottom:3%; z-index:7; }
-.book-khan { right:0; bottom:0; z-index:8; width:min(19vw,290px); }
-.book-khan img { aspect-ratio:1/1; }
 
 /* Recursive data */
 .slide-recursion .slide-heading { max-width:930px; }
@@ -137,6 +134,8 @@ button { font:inherit; }
 .anatomy-card img { aspect-ratio:1.75/1; }
 .roulette-card { left:0; bottom:0; width:min(26vw,395px); }
 .roulette-card img { aspect-ratio:1.48/1; }
+.khan-card { right:0; top:54%; z-index:2; width:min(13vw,195px); }
+.khan-card img { aspect-ratio:1/1; }
 .slide-recursion .slide-question { left:auto; right:0; bottom:0; max-width:42ch; text-align:right; }
 
 /* Glitch and spectrum */
@@ -164,11 +163,11 @@ button { font:inherit; }
 .composition-reference img { display:block; width:100%; aspect-ratio:1.5/1; object-fit:cover; }
 .composition-reference>span { display:flex; flex-direction:column; gap:3px; padding:9px 11px 11px; color:#aaa; font-size:9px; line-height:1.25; }
 .composition-reference strong { color:#f4f3ef; font-size:11px; font-weight:400; }
-.composition-media { position:absolute; left:0; bottom:15%; z-index:5; display:grid; grid-template-columns:1fr 1fr; gap:16px 22px; width:40%; }
+.composition-media { position:absolute; left:0; bottom:15%; z-index:5; display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px 18px; width:44%; }
 .composition-media article { padding-top:9px; border-top:1px solid var(--ink); }
 .composition-media b { display:block; margin-bottom:17px; font-size:9px; font-weight:400; text-transform:uppercase; letter-spacing:.07em; }
 .composition-media span { color:var(--muted); font-size:10px; line-height:1.35; }
-.composition-note { position:absolute; left:0; bottom:0; z-index:5; width:40%; margin:0; font-family:Georgia,'Times New Roman',serif; font-size:13px; font-style:italic; line-height:1.35; }
+.composition-note { position:absolute; left:0; bottom:0; z-index:5; width:44%; margin:0; font-family:Georgia,'Times New Roman',serif; font-size:13px; font-style:italic; line-height:1.35; }
 
 /* Closing */
 .closing-question { grid-column:1 / 4; grid-row:2; align-self:center; }
@@ -212,7 +211,7 @@ body.layout-editing .layout-resize-handle { display:block!important; }
   .cover-note { grid-column:2; }
   .forecast-collage,.sensing-collage,.recursion-collage { inset:30% 0 9% 32%; opacity:.44; }
   .forecast-map,.sensing-ground,.anatomy-card { width:62vw; }
-  .forecast-paglen,.sensing-body,.roulette-card { display:none; }
+  .forecast-paglen,.sensing-body,.roulette-card,.khan-card { display:none; }
   .theory-note { width:54%; }
   .translation-network { top:34%; bottom:100px; }
   .network-title { min-width:92px; padding:7px 9px; font-size:9px; }
@@ -234,12 +233,12 @@ body.layout-editing .layout-resize-handle { display:block!important; }
   .translation-footer p:last-child { display:none; }
   .knowledge-pair { width:100%; padding-top:18vh; }
   .knowledge-collage { inset:24% 0 17% 45%; }
-  .material-mine,.material-vessels { display:none!important; }
+  .material-mine { display:none!important; }
   .book-ref { width:15vw; }
   .book-haraway { left:0; }
   .book-tsing { left:34%; }
-  .book-khan { right:0; }
   .alchemy-line { width:46%; }
+  .alchemy-bridge { display:none; }
   .recursion-steps,.recursion-caveat { width:45%; }
   .slide-recursion .slide-question { width:48%; }
   .spectrum-terms { width:38%; }

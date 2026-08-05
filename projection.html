@@ -21,29 +21,26 @@
 
   <main id="projectionStage" class="projection-stage preview-mode">
     <div class="panel-registration" aria-hidden="true">
-      <div id="drawingField" class="drawing-field"><span>36 × 72 in drawing field</span></div>
-      <div id="mapField" class="map-field"></div>
+      <div id="mapField" class="map-field"><span>72 × 36 in panel</span></div>
     </div>
-    <div id="canvasMount" class="canvas-mount" aria-hidden="true"></div>
+    <div id="rotateStage" class="rotate-stage">
+      <div id="canvasMount" class="canvas-mount" aria-hidden="true"></div>
+    </div>
 
     <section class="projection-caption" aria-label="Current projection state">
-      <p><span id="stateIndex">01</span> <strong id="stateName">Texas bluegrass</strong></p>
-      <p id="stateDetail">A dense spatial sample reveals depth through a slowly moving virtual camera.</p>
-      <div id="filmTimeline" class="film-timeline" aria-label="Film timeline"></div>
+      <p><strong id="stateName">Remote view</strong></p>
+      <p id="stateDetail">A 2022 aerial follows the Brazos through the Fort Spunky study aperture.</p>
     </section>
 
     <aside class="projection-controls" aria-label="Projection controls">
-      <button id="previousScene" type="button" aria-label="Previous scene">← Scene</button>
-      <button id="playToggle" type="button" aria-pressed="true">Pause film</button>
-      <button id="nextScene" type="button" aria-label="Next scene">Scene →</button>
       <button id="cameraToggle" type="button">Begin movement sensing</button>
       <button id="outputToggle" type="button" aria-pressed="false">Installation output</button>
       <p id="sensorStatus">Camera off · pointer movement disturbs transmission</p>
     </aside>
-    <p class="projection-help">Space play/pause · ←/→ scenes · P preview/output · H controls · F fullscreen</p>
+    <p class="projection-help">P preview/output · H controls · F fullscreen</p>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/p5@1.11.10/lib/p5.min.js"></script>
-  <script src="projection.js"></script>
+  <script src="projection.js?v=11"></script>
 </body>
 </html>

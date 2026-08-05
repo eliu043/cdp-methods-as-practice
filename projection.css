@@ -19,25 +19,23 @@ button, select { font: inherit; }
 .projection-header nav a:hover, .projection-header nav .is-active { color: var(--paper); }
 .projection-mark { font-size: 16px; line-height: 10px; }
 .projection-stage { position: relative; width: 100vw; height: 100vh; background: var(--black); }
-.panel-registration { position: absolute; z-index: 1; inset: clamp(84px, 10vh, 116px) var(--pad) clamp(82px, 10vh, 112px); display: flex; justify-content: center; align-items: center; gap: clamp(14px, 2.2vw, 42px); pointer-events: none; }
-.drawing-field, .map-field { width: min(27vw, 36vh); aspect-ratio: 1 / 2; max-height: 72vh; }
-.drawing-field { position: relative; background: #fff; box-shadow: 0 0 0 1px rgba(255,255,255,.13); transition: background 240ms ease, box-shadow 240ms ease; }
-.drawing-field span { position: absolute; bottom: 10px; left: 12px; color: rgba(0,0,0,.31); font-size: 8px; letter-spacing: .07em; text-transform: uppercase; }
-.map-field { border: 1px solid rgba(255,255,255,.1); }
-.output-mode .drawing-field { background: var(--black); box-shadow: 0 0 0 1px rgba(255,255,255,.07); }
-.output-mode .drawing-field span { display: none; }
+.panel-registration { position: absolute; z-index: 1; inset: clamp(84px, 10vh, 116px) var(--pad) clamp(82px, 10vh, 112px); display: flex; justify-content: center; align-items: center; pointer-events: none; }
+.map-field { position: relative; width: min(88vw, calc(88vh * 2)); aspect-ratio: 2 / 1; border: 1px solid rgba(255,255,255,.1); }
+.map-field span { position: absolute; bottom: 10px; left: 12px; color: var(--muted); font-size: 8px; letter-spacing: .07em; text-transform: uppercase; }
+.output-mode .map-field { border-color: transparent; }
+.output-mode .map-field span { display: none; }
+.rotated .panel-registration { display: none; }
+.rotate-stage { position: absolute; inset: 0; }
+.rotate-stage.is-rotated-cw, .rotate-stage.is-rotated-ccw { position: fixed; top: 0; left: 0; width: 100vh; height: 100vw; transform-origin: top left; }
+.rotate-stage.is-rotated-cw { transform: rotate(90deg) translateY(-100%); }
+.rotate-stage.is-rotated-ccw { transform: rotate(-90deg) translateX(-100%); }
 .canvas-mount, .canvas-mount canvas { position: absolute !important; z-index: 2; inset: 0; display: block; }
 .canvas-mount { pointer-events: none; }
 .projection-caption { position: fixed; z-index: 12; left: var(--pad); bottom: 28px; max-width: 390px; pointer-events: none; }
 .projection-caption p { margin: 0 0 6px; font-size: 10px; line-height: 1.35; }
 .projection-caption p:first-child { text-transform: uppercase; letter-spacing: .06em; }
-.projection-caption span { display: inline-block; min-width: 25px; color: var(--signal); }
 .projection-caption strong { font-weight: 400; }
 .projection-caption p:last-child { max-width: 42ch; color: var(--muted); }
-.film-timeline { display:flex; width:min(360px,42vw); gap:3px; margin-top:13px; }
-.film-timeline span { display:block; width:100%; height:2px; background:rgba(244,243,239,.2); }
-.film-timeline span::after { content:""; display:block; width:var(--progress,0%); height:100%; background:var(--signal); }
-.film-timeline span.is-active { background:rgba(244,243,239,.38); }
 .projection-controls { position: fixed; z-index: 24; right: var(--pad); bottom: 26px; display: flex; align-items: center; justify-content:flex-end; flex-wrap:wrap; max-width:62vw; gap: 8px; transition: opacity 160ms ease; }
 .projection-controls button, .projection-controls label { min-height: 31px; border: 1px solid var(--line); background: rgba(6,7,7,.82); color: var(--paper); font-size: 9px; letter-spacing: .045em; text-transform: uppercase; }
 .projection-controls button { padding: 0 11px; cursor: pointer; }
@@ -51,10 +49,8 @@ button, select { font: inherit; }
   .projection-header { grid-template-columns: 1fr auto; }
   .projection-header p { display: none; }
   .projection-header nav a:not(.projection-mark) { display: none; }
-  .panel-registration { gap: 10px; }
-  .drawing-field, .map-field { width: min(43vw, 34vh); }
+  .map-field { width: min(92vw, calc(60vh * 2)); }
   .projection-controls { left: var(--pad); right: var(--pad); flex-wrap: wrap; }
   .projection-controls label { display: none; }
   .projection-caption { bottom: 108px; }
 }
-@media (prefers-reduced-motion: reduce) { .drawing-field { transition: none; } }

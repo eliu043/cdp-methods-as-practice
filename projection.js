@@ -1,29 +1,14 @@
 const stage = document.getElementById('projectionStage');
 const mount = document.getElementById('canvasMount');
-const drawingField = document.getElementById('drawingField');
+const rotateStage = document.getElementById('rotateStage');
 const mapField = document.getElementById('mapField');
-const previousSceneButton = document.getElementById('previousScene');
-const playToggle = document.getElementById('playToggle');
-const nextSceneButton = document.getElementById('nextScene');
 const cameraToggle = document.getElementById('cameraToggle');
 const outputToggle = document.getElementById('outputToggle');
 const sensorStatus = document.getElementById('sensorStatus');
-const stateIndex = document.getElementById('stateIndex');
 const stateName = document.getElementById('stateName');
 const stateDetail = document.getElementById('stateDetail');
-const filmTimeline = document.getElementById('filmTimeline');
 
-const scenes = [
-  { id: 'ground', name: 'Texas bluegrass', duration: 12000, detail: 'A dense spatial sample reveals depth through a slowly moving virtual camera.' },
-  { id: 'remote', name: 'Remote view', duration: 12000, detail: 'A 2022 aerial follows the Brazos through the Fort Spunky study aperture.' },
-  { id: 'history', name: 'Historical aerials', duration: 15000, detail: 'Registered NAIP acquisitions cut between 2010, 2014, 2018, and 2022.' },
-  { id: 'wildflowers', name: 'Wildflower field', duration: 12000, detail: 'Photographic color occupies a porous volume; movement interrupts its transmission.' },
-  { id: 'spectrum', name: 'Other spectrum', duration: 12000, detail: 'The 2022 four-band survey switches from natural color to infrared and computed NDVI.' },
-  { id: 'capture', name: 'Capture', duration: 12000, detail: 'Living movement becomes an incomplete point cloud.' },
-  { id: 'classification', name: 'Classification', duration: 12000, detail: 'Continuous ground becomes cells, scores, and comparable units.' },
-  { id: 'commitment', name: 'Commitment', duration: 12000, detail: 'A forecast begins reserving capacity before construction.' },
-  { id: 'loss', name: 'Index / loss', duration: 14000, detail: 'A computed vegetation index persists while its transmission loses resolution.' }
-];
+const scene = { id: 'remote', name: 'Remote view', detail: 'A 2022 aerial follows the Brazos through the Fort Spunky study aperture.' };
 
 const palettes = {
   visible: { filter: 'saturate(.72) contrast(1.06)', veil: [16, 19, 15, 20], signal: [221, 255, 48] },
@@ -36,8 +21,6 @@ let terrain;
 let aerialImages = [];
 let falseColorAerial;
 let ndviAerial;
-let texasBluegrassImage;
-let wildflowerImage;
 let capture;
 let poseLandmarker;
 let detectorLoading = false;
@@ -46,24 +29,28 @@ let cameraActive = false;
 let cameraProximity = 0;
 let pointerProximity = .08;
 let proximity = .08;
-let commitment = 0;
 let lastDetection = 0;
 let lastVideoTime = -1;
 let lastBodySeenAt = 0;
 let bodyCount = 0;
 let spectrum = 'visible';
-let currentSceneIndex = 0;
-let sceneElapsed = 0;
-let filmPlaying = true;
 let movementEnergy = 0;
 let movementImpulse = 0;
 let lastPoseCenter;
 let lastPoseScale = 0;
 let lastPointer = { x: 0, y: 0, time: 0 };
-let grassBlades = [];
-let cloudPoints = [];
 let driftClouds = {};
+let palimpsestBuffer;
+// Kept up to date but currently unused by any visible effect — the Game of
+// Life layer runs purely off the imagery for now. Left wired up for a later
+// pass where pose position could seed or bias the automaton.
+let latestPoses = [];
+const PALIMPSEST_W = 1280;
+const PALIMPSEST_H = 640;
+const PANEL_ASPECT = 2; // 72 x 36 in
 let outputMode = new URLSearchParams(location.search).get('output') === '1';
+const rotateParam = new URLSearchParams(location.search).get('rotate');
+const rotateDirection = rotateParam === 'cw' || rotateParam === 'ccw' ? rotateParam : null;
 
 function seeded(seed) {
   let value = seed >>> 0;
@@ -115,32 +102,6 @@ function buildTerrain() {
   for (let i = 0; i < 160; i += 1) terrain.circle(rand() * terrain.width, rand() * terrain.height, 3 + rand() * 13);
 }
 
-function buildSceneMaterial() {
-  const rand = seeded(90210);
-  grassBlades = Array.from({ length: 190 }, (_, index) => ({
-    x: rand(),
-    height: .15 + rand() * .46,
-    lean: (rand() - .5) * .24,
-    phase: rand() * TWO_PI,
-    depth: rand(),
-    index
-  }));
-  cloudPoints = [];
-  for (const blade of grassBlades) {
-    for (let step = 0; step <= 11; step += 1) {
-      cloudPoints.push({
-        x: blade.x,
-        y: step / 11,
-        height: blade.height,
-        lean: blade.lean,
-        phase: blade.phase,
-        depth: blade.depth,
-        dropout: rand()
-      });
-    }
-  }
-}
-
 function buildDriftCloud(key, source, count, seed, sampleCrop) {
   const rand = seeded(seed);
   source.loadPixels();
@@ -172,21 +133,203 @@ function buildDriftCloud(key, source, count, seed, sampleCrop) {
 }
 
 function buildDriftClouds() {
-  const fieldPanel = { w: 1, h: 2 };
-  buildDriftCloud('bluegrass', texasBluegrassImage, 22000, 6214, coverCrop(fieldPanel, texasBluegrassImage));
-  buildDriftCloud('wildflowers', wildflowerImage, 22000, 6417, coverCrop(fieldPanel, wildflowerImage));
   historicalYears.forEach((year, index) => buildDriftCloud(`aerial-${year}`, aerialImages[index], 5600, 7000 + year));
   buildDriftCloud('cir-2022', falseColorAerial, 5600, 9222);
   buildDriftCloud('ndvi-2022', ndviAerial, 5600, 12222);
 }
 
+function buildPalimpsestBuffer() {
+  palimpsestBuffer = createGraphics(PALIMPSEST_W, PALIMPSEST_H);
+  palimpsestBuffer.pixelDensity(1);
+  palimpsestBuffer.clear();
+}
+
+const LIFE_COLS = 320;
+const LIFE_ROWS = 160;
+const LIFE_CELL_PX = 4; // must equal PALIMPSEST_W / LIFE_COLS (and PALIMPSEST_H / LIFE_ROWS)
+let lifeGrid;
+let lifeColors;
+let lastLifeStepTime = -Infinity;
+let lastLifeSeedTime = -Infinity;
+const LIFE_STEP_MS = 180;
+const LIFE_RESEED_MS = 2200;
+const LIFE_BLOOM_RESET_DENSITY = .82;
+
+function buildLifeGrid() {
+  lifeGrid = new Uint8Array(LIFE_COLS * LIFE_ROWS);
+  lifeColors = new Array(LIFE_COLS * LIFE_ROWS).fill([40, 70, 110]);
+}
+
+// Reads whatever satellite imagery is currently on screen within the panel
+// and samples one color + luminance per grid cell. Not called every frame —
+// only at each reseed, since getImageData is a synchronous GPU->CPU readback.
+function sampleImageGrid(panel) {
+  const density = pixelDensity();
+  const bx = Math.max(0, Math.floor(panel.x * density));
+  const by = Math.max(0, Math.floor(panel.y * density));
+  const bw = Math.max(1, Math.min(width * density - bx, Math.ceil(panel.w * density)));
+  const bh = Math.max(1, Math.min(height * density - by, Math.ceil(panel.h * density)));
+  const data = drawingContext.getImageData(bx, by, bw, bh).data;
+  const luma = new Float32Array(LIFE_COLS * LIFE_ROWS);
+  const colors = new Array(LIFE_COLS * LIFE_ROWS);
+  for (let cy = 0; cy < LIFE_ROWS; cy += 1) {
+    for (let cx = 0; cx < LIFE_COLS; cx += 1) {
+      const sx = min(bw - 1, floor((cx + .5) / LIFE_COLS * bw));
+      const sy = min(bh - 1, floor((cy + .5) / LIFE_ROWS * bh));
+      const o = (sy * bw + sx) * 4;
+      const r = data[o];
+      const g = data[o + 1];
+      const b = data[o + 2];
+      const i = cy * LIFE_COLS + cx;
+      luma[i] = r * .2126 + g * .7152 + b * .0722;
+      colors[i] = [r, g, b];
+    }
+  }
+  return { luma, colors };
+}
+
+// Seeds new living cells along luminance edges in the current imagery —
+// roads, water lines, field boundaries — rather than clearing and restarting,
+// so freshly-seeded life keeps merging with whatever pattern is mid-evolution.
+// Also refreshes each cell's color, so as the aerial pan scrolls the automaton
+// keeps drawing new ground color rather than running on a single stale frame.
+function reseedLife(panel) {
+  const { luma, colors } = sampleImageGrid(panel);
+  lifeColors = colors;
+  for (let cy = 0; cy < LIFE_ROWS; cy += 1) {
+    for (let cx = 0; cx < LIFE_COLS; cx += 1) {
+      const i = cy * LIFE_COLS + cx;
+      const right = cx + 1 < LIFE_COLS ? luma[i + 1] : luma[i];
+      const down = cy + 1 < LIFE_ROWS ? luma[i + LIFE_COLS] : luma[i];
+      const edge = Math.abs(luma[i] - right) + Math.abs(luma[i] - down);
+      if (edge > 26 && random() < .55) lifeGrid[i] = 1;
+    }
+  }
+}
+
+// Life Without Death (B3/S012345678) — "blooming flakes": birth still needs
+// exactly 3 neighbors, but a living cell never dies regardless of neighbor
+// count. Growth only ever spreads outward from each seed, crystalline and
+// coral-like, rather than oscillating the way Conway's Life does. Returns
+// the resulting live-cell density so the caller can reset once it blooms
+// to fullness (nothing in this rule ever shrinks it back down on its own).
+function stepLife() {
+  const next = new Uint8Array(LIFE_COLS * LIFE_ROWS);
+  let aliveCount = 0;
+  for (let cy = 0; cy < LIFE_ROWS; cy += 1) {
+    for (let cx = 0; cx < LIFE_COLS; cx += 1) {
+      let n = 0;
+      for (let oy = -1; oy <= 1; oy += 1) {
+        for (let ox = -1; ox <= 1; ox += 1) {
+          if (ox === 0 && oy === 0) continue;
+          const nx = cx + ox;
+          const ny = cy + oy;
+          if (nx < 0 || nx >= LIFE_COLS || ny < 0 || ny >= LIFE_ROWS) continue;
+          n += lifeGrid[ny * LIFE_COLS + nx];
+        }
+      }
+      const i = cy * LIFE_COLS + cx;
+      const born = lifeGrid[i] === 1 || n === 3 ? 1 : 0;
+      next[i] = born;
+      aliveCount += born;
+    }
+  }
+  lifeGrid = next;
+  return aliveCount / (LIFE_COLS * LIFE_ROWS);
+}
+
+// Writes directly into the buffer's pixel array rather than issuing a
+// rect() draw call per living cell — at 320x160 cells that's up to ~25k
+// cells, and raw pixel writes stay cheap where that many canvas draw calls
+// would not. Relies on LIFE_CELL_PX being an exact, whole-number divisor of
+// PALIMPSEST_W/H so each cell maps to a clean block of pixels.
+function drawLife() {
+  palimpsestBuffer.loadPixels();
+  const buf = palimpsestBuffer.pixels;
+  for (let cy = 0; cy < LIFE_ROWS; cy += 1) {
+    for (let cx = 0; cx < LIFE_COLS; cx += 1) {
+      const i = cy * LIFE_COLS + cx;
+      if (!lifeGrid[i]) continue;
+      const [r, g, b] = lifeColors[i];
+      const startX = cx * LIFE_CELL_PX;
+      const startY = cy * LIFE_CELL_PX;
+      for (let py = 0; py < LIFE_CELL_PX; py += 1) {
+        let o = ((startY + py) * PALIMPSEST_W + startX) * 4;
+        for (let px = 0; px < LIFE_CELL_PX; px += 1) {
+          buf[o] = r;
+          buf[o + 1] = g;
+          buf[o + 2] = b;
+          buf[o + 3] = 255;
+          o += 4;
+        }
+      }
+    }
+  }
+  palimpsestBuffer.updatePixels();
+}
+
+// Cleared fully each frame — living cells are a hard, opaque cut into the
+// image rather than a fading trace, so dead cells vanish immediately instead
+// of ghosting out.
+function updatePalimpsest(panel) {
+  if (!palimpsestBuffer) return;
+  palimpsestBuffer.clear();
+
+  if (!panel) return;
+  const now = millis();
+  if (now - lastLifeSeedTime > LIFE_RESEED_MS) {
+    reseedLife(panel);
+    lastLifeSeedTime = now;
+  }
+  if (now - lastLifeStepTime > LIFE_STEP_MS) {
+    const density = stepLife();
+    lastLifeStepTime = now;
+    if (density > LIFE_BLOOM_RESET_DENSITY) {
+      lifeGrid.fill(0);
+      reseedLife(panel);
+      lastLifeSeedTime = now;
+    }
+  }
+  drawLife();
+}
+
+function drawPalimpsestLayer(panel, opacity) {
+  if (!palimpsestBuffer || opacity < .01) return;
+  push();
+  drawingContext.imageSmoothingEnabled = false;
+  tint(255, 255 * opacity);
+  image(palimpsestBuffer, panel.x, panel.y, panel.w, panel.h);
+  drawingContext.imageSmoothingEnabled = true;
+  pop();
+}
+
+// When rotated, the canvas-mount is rotated by CSS transform on #rotateStage,
+// so getBoundingClientRect() would return post-rotation, viewport-space
+// coordinates that no longer match the canvas's own (pre-transform) pixel
+// space. The panel rect has to be computed analytically against the logical
+// (un-rotated) canvas size instead of measured from the DOM in that case.
+function logicalPanelRect(w, h) {
+  const marginX = w * .05;
+  const marginY = h * .12;
+  const availW = w - marginX * 2;
+  const availH = h - marginY * 2;
+  let panelW = availW;
+  let panelH = panelW / PANEL_ASPECT;
+  if (panelH > availH) {
+    panelH = availH;
+    panelW = panelH * PANEL_ASPECT;
+  }
+  return { x: (w - panelW) / 2, y: (h - panelH) / 2, w: panelW, h: panelH };
+}
+
 function fieldRects() {
-  const d = drawingField.getBoundingClientRect();
+  if (rotateDirection) {
+    const panel = logicalPanelRect(width, height);
+    return { drawing: panel, map: panel };
+  }
   const m = mapField.getBoundingClientRect();
-  return {
-    drawing: { x: d.left, y: d.top, w: d.width, h: d.height },
-    map: { x: m.left, y: m.top, w: m.width, h: m.height }
-  };
+  const panel = { x: m.left, y: m.top, w: m.width, h: m.height };
+  return { drawing: panel, map: panel };
 }
 
 function activeSpectrum(scene, progress) {
@@ -195,12 +338,24 @@ function activeSpectrum(scene, progress) {
   return spectrumOrder[index];
 }
 
+// The NAIP frames are tall, portrait scans (1200x2200); the panel is wide
+// landscape. Start from a candidate crop height, then derive width from the
+// panel's aspect ratio, but if that width would exceed the source image's
+// width, fall back to cropping by the full width instead and derive height
+// from that — this is the only way to guarantee the crop's own aspect always
+// matches the panel's, so image() is scaling a same-shaped region, never
+// stretching a mismatched one.
 function aerialCrop(mapRect, sourceImage) {
-  const sourceH = sourceImage === terrain ? min(sourceImage.height, mapRect.h * 2.8) : sourceImage.height * .7;
-  const sourceW = min(sourceImage.width, sourceH * mapRect.w / mapRect.h);
+  const aspect = mapRect.w / mapRect.h;
+  let sourceH = sourceImage === terrain ? min(sourceImage.height, mapRect.h * 2.8) : sourceImage.height * .7;
+  let sourceW = sourceH * aspect;
+  if (sourceW > sourceImage.width) {
+    sourceW = sourceImage.width;
+    sourceH = sourceW / aspect;
+  }
   const sourceX = (sourceImage.width - sourceW) / 2;
   const panRange = max(1, sourceImage.height - sourceH);
-  return { x: sourceX, y: (millis() * .012) % panRange, w: sourceW, h: sourceH };
+  return { x: sourceX, y: panRange * .5, w: sourceW, h: sourceH };
 }
 
 function drawAerialPan(mapRect, palette, glitch, sourceImage = aerialImages.at(-1) || terrain) {
@@ -290,29 +445,6 @@ function drawDriftingPixels(panel, key, source, amount, crop = { x: 0, y: 0, w: 
   });
 }
 
-function coverCrop(panel, source) {
-  const panelAspect = panel.w / panel.h;
-  const sourceAspect = source.width / source.height;
-  if (sourceAspect > panelAspect) {
-    const width = source.height * panelAspect;
-    return { x: (source.width - width) / 2, y: 0, w: width, h: source.height };
-  }
-  const height = source.width / panelAspect;
-  return { x: 0, y: (source.height - height) / 2, w: source.width, h: height };
-}
-
-function drawFieldScene(panel, progress, source, cloudKey, label) {
-  const crop = coverCrop(panel, source);
-  drawDriftingPixels(panel, cloudKey, source, 1, crop, { pointCloudMode: true });
-  push();
-  fill(244, 243, 239, 145);
-  noStroke();
-  textSize(8);
-  textAlign(LEFT, TOP);
-  text(label, panel.x + 10, panel.y + 10);
-  pop();
-}
-
 const historicalYears = [2010, 2014, 2018, 2022];
 
 function drawHistoricalScene(panel, progress) {
@@ -339,63 +471,7 @@ function drawHistoricalScene(panel, progress) {
   });
 }
 
-function drawPointCloudScene(panel, progress) {
-  clipTo(panel, () => {
-    push();
-    noStroke();
-    fill(3, 4, 4, 245);
-    rect(panel.x, panel.y, panel.w, panel.h);
-    const wind = sin(millis() * .0014) * panel.w * .045;
-    const reveal = constrain(progress * 1.7, 0, 1);
-    for (const pointData of cloudPoints) {
-      if (pointData.dropout > reveal) continue;
-      const baseY = panel.y + panel.h * (.95 - pointData.depth * .1);
-      const bladeHeight = pointData.height * panel.h * (.46 + pointData.depth * .54);
-      const curve = pointData.y;
-      const sway = sin(millis() * .0019 + pointData.phase) * panel.w * .035 + wind;
-      const x = panel.x + pointData.x * panel.w + (pointData.lean * panel.w + sway) * curve * curve;
-      const y = baseY - bladeHeight * curve;
-      const jitter = (noise(pointData.x * 80, pointData.y * 30, millis() * .00025) - .5) * 5;
-      fill(184, 214, 180, 40 + pointData.depth * 180);
-      circle(x + jitter, y, .7 + pointData.depth * 1.6);
-    }
-    fill(244, 243, 239, 130);
-    textSize(8);
-    textAlign(LEFT, TOP);
-    text('POINT CAPTURE / MOVEMENT EXCEEDS RECONSTRUCTION', panel.x + 10, panel.y + 10);
-    pop();
-  });
-}
-
-function drawClassificationScene(rects, progress) {
-  const source = aerialImages.at(-1);
-  const crop = drawAerialPan(rects.map, palettes.visible, .02, source);
-  drawDriftingPixels(rects.map, 'aerial-2022', source, constrain(.04 + movementEnergy * .35, 0, .45), crop);
-  const panels = [rects.drawing, rects.map];
-  for (const panel of panels) {
-    push();
-    stroke(221, 255, 48, 55 + progress * 115);
-    strokeWeight(1);
-    noFill();
-    const columns = 6;
-    const rows = 12;
-    for (let x = 1; x < columns; x += 1) line(panel.x + panel.w * x / columns, panel.y, panel.x + panel.w * x / columns, panel.y + panel.h);
-    for (let y = 1; y < rows; y += 1) line(panel.x, panel.y + panel.h * y / rows, panel.x + panel.w, panel.y + panel.h * y / rows);
-    noStroke();
-    for (let x = 0; x < columns; x += 1) {
-      for (let y = 0; y < rows; y += 1) {
-        const score = noise(x * .63 + 4, y * .44 + 20);
-        fill(221, 255, 48, score * progress * 46);
-        rect(panel.x + x * panel.w / columns, panel.y + y * panel.h / rows, panel.w / columns, panel.h / rows);
-      }
-    }
-    pop();
-  }
-}
-
 function drawFilmScene(rects, scene, progress) {
-  if (scene.id === 'ground') drawFieldScene(rects.map, progress, texasBluegrassImage, 'bluegrass', 'TEXAS BLUEGRASS / SPATIAL POINT FIELD');
-  if (scene.id === 'wildflowers') drawFieldScene(rects.map, progress, wildflowerImage, 'wildflowers', 'WILDFLOWER FIELD / SPATIAL POINT FIELD');
   if (scene.id === 'remote') {
     const source = aerialImages.at(-1);
     const crop = drawAerialPan(rects.map, palettes.visible, .015, source);
@@ -409,140 +485,24 @@ function drawFilmScene(rects, scene, progress) {
     const crop = drawAerialPan(rects.map, palettes[spectrum], .025, imageSource);
     drawDriftingPixels(rects.map, cloudKey, imageSource, constrain(.08 + (1 - localProgress) * .34 + movementEnergy * .45, 0, .7), crop);
   }
-  if (scene.id === 'capture') drawPointCloudScene(rects.map, progress);
-  if (scene.id === 'classification') drawClassificationScene(rects, progress);
-  if (scene.id === 'commitment') {
-    const source = aerialImages.at(-1);
-    const crop = drawAerialPan(rects.map, palettes.visible, .02, source);
-    drawDriftingPixels(rects.map, 'aerial-2022', source, constrain(.04 + movementEnergy * .3, 0, .4), crop);
-    drawCommitmentLayer(rects, constrain(progress * 1.35, 0, 1), palettes.visible);
-  }
   if (scene.id === 'loss') {
     const crop = drawAerialPan(rects.map, palettes.ndvi, .03 + progress * .32, ndviAerial);
     drawDriftingPixels(rects.map, 'ndvi-2022', ndviAerial, constrain(.18 + progress * .7 + movementEnergy * .25, 0, 1), crop);
   }
 }
 
-function applyTransmissionGlitch(rects, intensity) {
-  if (intensity < .025) return;
-  const left = rects.drawing.x;
-  const right = rects.map.x + rects.map.w;
-  const top = min(rects.drawing.y, rects.map.y);
-  const totalWidth = right - left;
-  const totalHeight = max(rects.drawing.h, rects.map.h);
-  push();
-  const slices = floor(2 + intensity * 22);
-  for (let i = 0; i < slices; i += 1) {
-    const sy = top + random(totalHeight);
-    const sh = random(2, 7 + intensity * 42);
-    const shift = random(-1, 1) * intensity * totalWidth * .12;
-    copy(left, sy, totalWidth, sh, left + shift, sy, totalWidth, sh);
-  }
-  noStroke();
-  const blocks = floor(intensity * 18);
-  for (let i = 0; i < blocks; i += 1) {
-    const size = random(7, 22 + proximity * 75);
-    fill(random() > .5 ? 4 : 235, random() > .5 ? 5 : 233, random() > .5 ? 5 : 226, 35 + intensity * 105);
-    rect(left + random(totalWidth), top + random(totalHeight), size, size * random(.4, 1.8));
-  }
-  pop();
-}
-
-function drawCommitmentLayer(rects, amount, palette) {
-  if (amount < .03) return;
-  const d = rects.drawing;
-  const stageValue = amount * 4;
-  const alpha = 40 + amount * 145;
-  const [r, g, b] = palette.signal;
-  push();
-  noFill();
-  stroke(r, g, b, alpha);
-  strokeWeight(1);
-  if (stageValue > .45) {
-    for (let x = 1; x < 6; x += 1) line(d.x + d.w * x / 6, d.y, d.x + d.w * x / 6, d.y + d.h);
-    for (let y = 1; y < 12; y += 1) line(d.x, d.y + d.h * y / 12, d.x + d.w, d.y + d.h * y / 12);
-  }
-  if (stageValue > 1.45) {
-    noStroke();
-    for (let x = 0; x < 5; x += 1) {
-      for (let y = 0; y < 10; y += 1) {
-        const score = noise(x * .72 + 10, y * .54 + 20);
-        fill(r, g, b, map(score, 0, 1, 5, 70) * amount);
-        rect(d.x + x * d.w / 5, d.y + y * d.h / 10, d.w / 5, d.h / 10);
-      }
-    }
-  }
-  if (stageValue > 3.45) {
-    const pulse = .55 + sin(millis() * .006) * .2;
-    noStroke();
-    fill(r, g, b, 65 * pulse);
-    rect(d.x + d.w * .34, d.y + d.h * .43, d.w * .42, d.h * .19);
-    fill(r, g, b, 220);
-    textSize(8);
-    textAlign(LEFT, BOTTOM);
-    text('CAPACITY RESERVED / COMMITMENT PERSISTS', d.x + 8, d.y - 9);
-  }
-  pop();
-}
-
-function drawMetadata(rect, palette, scene, progress) {
+function drawMetadata(rect, palette) {
   const [r, g, b] = palette.signal;
   push();
   fill(244, 243, 239, 150);
   noStroke();
   textSize(8);
   textAlign(LEFT, BOTTOM);
-  const sceneNumber = String(currentSceneIndex + 1).padStart(2, '0');
-  text(`SCENE ${sceneNumber}/${String(scenes.length).padStart(2, '0')}  ·  ${spectrum.toUpperCase()}`, rect.x, rect.y - 9);
+  text(spectrum.toUpperCase(), rect.x, rect.y - 9);
   textAlign(RIGHT, BOTTOM);
   fill(r, g, b, 210);
-  text(`MOTION ${nf(movementEnergy, 1, 2)}  ·  PROXIMITY ${nf(proximity, 1, 2)}  ·  ${floor(progress * 100)}%`, rect.x + rect.w, rect.y - 9);
+  text(`MOTION ${nf(movementEnergy, 1, 2)}  ·  PROXIMITY ${nf(proximity, 1, 2)}`, rect.x + rect.w, rect.y - 9);
   pop();
-}
-
-function buildTimeline() {
-  filmTimeline.replaceChildren();
-  scenes.forEach((scene, index) => {
-    const segment = document.createElement('span');
-    segment.title = `${String(index + 1).padStart(2, '0')} ${scene.name}`;
-    segment.setAttribute('aria-label', segment.title);
-    filmTimeline.appendChild(segment);
-  });
-}
-
-function setScene(index) {
-  currentSceneIndex = (index + scenes.length) % scenes.length;
-  sceneElapsed = 0;
-  const scene = scenes[currentSceneIndex];
-  stateIndex.textContent = String(currentSceneIndex + 1).padStart(2, '0');
-  stateName.textContent = scene.name;
-  stateDetail.textContent = scene.detail;
-  updateTimeline(0);
-}
-
-function updateTimeline(progress) {
-  [...filmTimeline.children].forEach((segment, index) => {
-    segment.classList.toggle('is-active', index === currentSceneIndex);
-    segment.style.setProperty('--progress', index < currentSceneIndex ? '100%' : index === currentSceneIndex ? `${progress * 100}%` : '0%');
-  });
-}
-
-function updateFilm() {
-  const scene = scenes[currentSceneIndex];
-  if (filmPlaying) sceneElapsed += min(deltaTime, 100);
-  if (sceneElapsed >= scene.duration) {
-    setScene(currentSceneIndex + 1);
-    return { scene: scenes[currentSceneIndex], progress: 0 };
-  }
-  const progress = constrain(sceneElapsed / scene.duration, 0, 1);
-  updateTimeline(progress);
-  return { scene, progress };
-}
-
-function toggleFilm() {
-  filmPlaying = !filmPlaying;
-  playToggle.textContent = filmPlaying ? 'Pause film' : 'Play film';
-  playToggle.setAttribute('aria-pressed', String(filmPlaying));
 }
 
 async function setupDetector() {
@@ -575,6 +535,7 @@ function landmarkDistance(a, b) {
 }
 
 function analyzePoses(poses) {
+  latestPoses = poses || [];
   if (!poses?.length) {
     bodyCount = 0;
     cameraProximity *= .9;
@@ -668,31 +629,42 @@ function updateInteraction() {
   detectProximity();
   const target = cameraActive ? cameraProximity : pointerProximity;
   proximity = lerp(proximity, target, .075);
-  if (proximity > commitment) commitment = lerp(commitment, proximity, .12);
-  else commitment = max(0, commitment - .00013 * deltaTime);
   movementEnergy = max(movementImpulse, movementEnergy * Math.pow(.91, deltaTime / 16.67));
   movementImpulse *= Math.pow(.72, deltaTime / 16.67);
 }
 
 window.preload = function preload() {
-  texasBluegrassImage = loadImage('assets/projection/texas-bluegrass.png');
-  wildflowerImage = loadImage('assets/projection/texas-wildflower-field.png');
   aerialImages = historicalYears.map((year) => loadImage(`assets/projection/fort-spunky-naip-${year}.jpg`));
   falseColorAerial = loadImage('assets/projection/fort-spunky-naip-2022-cir.jpg');
   ndviAerial = loadImage('assets/projection/fort-spunky-naip-2022-ndvi.png');
 };
 
+// The physical projector is mounted on its side, so its native output is
+// portrait relative to what the page composes. Rendering at swapped
+// dimensions (and rotating that whole render via CSS on #rotateStage) means
+// the artwork is authored in normal landscape logic throughout, then comes
+// out upright once the tilted projector reprojects it.
+function stageSize() {
+  return rotateDirection ? { w: window.innerHeight, h: window.innerWidth } : { w: window.innerWidth, h: window.innerHeight };
+}
+
 window.setup = function setup() {
-  const canvas = createCanvas(windowWidth, windowHeight);
+  if (rotateDirection) {
+    rotateStage.classList.add(rotateDirection === 'cw' ? 'is-rotated-cw' : 'is-rotated-ccw');
+    stage.classList.add('rotated');
+  }
+  const size = stageSize();
+  const canvas = createCanvas(size.w, size.h);
   canvas.parent(mount);
   pixelDensity(min(2, window.devicePixelRatio || 1));
   noiseSeed(9173);
   randomSeed(9173);
   buildTerrain();
-  buildSceneMaterial();
   buildDriftClouds();
-  buildTimeline();
-  setScene(0);
+  buildPalimpsestBuffer();
+  buildLifeGrid();
+  stateName.textContent = scene.name;
+  stateDetail.textContent = scene.detail;
   stage.classList.toggle('output-mode', outputMode);
   stage.classList.toggle('preview-mode', !outputMode);
   outputToggle.setAttribute('aria-pressed', String(outputMode));
@@ -702,21 +674,19 @@ window.setup = function setup() {
 window.draw = function draw() {
   clear();
   updateInteraction();
-  const { scene, progress } = updateFilm();
-  spectrum = activeSpectrum(scene, progress);
+  spectrum = activeSpectrum(scene, 0);
   const palette = palettes[spectrum];
   const rects = fieldRects();
-  drawFilmScene(rects, scene, progress);
-  const cutIn = constrain(1 - progress / .075, 0, 1);
-  const cutOut = constrain((progress - .91) / .09, 0, 1);
-  const transitionGlitch = max(cutIn, cutOut) * .62;
-  const movementGlitch = movementEnergy * (.35 + proximity * .65);
-  const terminalLoss = scene.id === 'loss' ? progress * .24 : 0;
-  applyTransmissionGlitch(rects, constrain(transitionGlitch + movementGlitch + terminalLoss, 0, 1));
-  drawMetadata(rects.map, palette, scene, progress);
+  drawFilmScene(rects, scene, 0);
+  updatePalimpsest(rects.map);
+  drawPalimpsestLayer(rects.map, 1);
+  drawMetadata(rects.map, palette);
 };
 
-window.windowResized = function windowResized() { resizeCanvas(windowWidth, windowHeight); };
+window.windowResized = function windowResized() {
+  const size = stageSize();
+  resizeCanvas(size.w, size.h);
+};
 window.mouseMoved = function mouseMoved() {
   const now = performance.now();
   if (lastPointer.time) {
@@ -728,9 +698,6 @@ window.mouseMoved = function mouseMoved() {
   if (!cameraActive) pointerProximity = constrain(1 - mouseY / height, .04, 1);
 };
 
-previousSceneButton.addEventListener('click', () => setScene(currentSceneIndex - 1));
-playToggle.addEventListener('click', toggleFilm);
-nextSceneButton.addEventListener('click', () => setScene(currentSceneIndex + 1));
 cameraToggle.addEventListener('click', () => cameraActive ? stopCamera() : startCamera());
 outputToggle.addEventListener('click', () => {
   outputMode = !outputMode;
@@ -740,12 +707,6 @@ outputToggle.addEventListener('click', () => {
   outputToggle.textContent = outputMode ? 'Drawing preview' : 'Installation output';
 });
 document.addEventListener('keydown', (event) => {
-  if (event.code === 'Space') {
-    event.preventDefault();
-    toggleFilm();
-  }
-  if (event.key === 'ArrowLeft') setScene(currentSceneIndex - 1);
-  if (event.key === 'ArrowRight') setScene(currentSceneIndex + 1);
   if (event.key.toLowerCase() === 'p') outputToggle.click();
   if (event.key.toLowerCase() === 'h') stage.classList.toggle('controls-hidden');
   if (event.key.toLowerCase() === 'f') {

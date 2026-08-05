@@ -37,7 +37,8 @@
       "Bash(curl -s http://127.0.0.1:8934/)",
       "Bash(node --check /Users/ericliu/Documents/GitHub/cdp-methods-as-practice/toy-scene.js)",
       "Bash(python3 -c ' *)",
-      "Bash(curl -s \"https://unpkg.com/three@0.160.0/examples/jsm/environments/RoomEnvironment.js\")"
+      "Bash(curl -s \"https://unpkg.com/three@0.160.0/examples/jsm/environments/RoomEnvironment.js\")",
+      "Bash(git tag *)"
     ]
   }
 }
