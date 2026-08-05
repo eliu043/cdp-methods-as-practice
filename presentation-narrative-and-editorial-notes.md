@@ -140,7 +140,7 @@ This is the seam repair. The last line is the bridge—say it deliberately, then
 
 **Time:** 3:40–4:30
 
-**Visual role:** The *Anatomy of AI* diagram shows material systems; *ImageNet Roulette* shows recognition as classification and harm.
+**Visual role:** The *Anatomy of AI* diagram shows material systems; *ImageNet Roulette* shows recognition as classification and harm; a smaller *HOLO 3: Mirror Stage* card sits between them as conceptual ballast for the closing question.
 
 ### Script
 

@@ -21,6 +21,8 @@
   <main class="deck-viewport" aria-label="Vertical thesis presentation">
     <div class="deck-plane" id="deckPlane">
       <section class="slide slide-cover is-active" id="opening">
+        <canvas class="opening-map" id="mapCanvas" data-pixel-map aria-hidden="true"></canvas>
+        <div class="opening-map-veil" aria-hidden="true"></div>
         <div class="slide-grid">
           <p class="eyebrow">Research Territory</p>
           <div class="cover-title">
@@ -145,8 +147,7 @@
             <article><b>Recursion</b><span>Synthetic outputs re-enter the training set.</span></article>
             <article><b>Selection</b><span>Institutions decide which human examples remain valuable.</span></article>
           </div>
-          <p class="recursion-caveat">Recursive training is not inevitably collapse; the politics lie in curation, mixture, provenance, and who controls the “real.”</p>
-          <p class="slide-question">Who retains agency over recognition—and, following Khan, over the right to remain unread?</p>
+          <p class="slide-question recursion-khan-question">Who retains agency over recognition—and, following Khan, over the right to remain unread?</p>
           <div class="image-collage recursion-collage" aria-label="Machine learning and recognition precedents">
             <a class="image-card anatomy-card" href="https://anatomyof.ai/" target="_blank" rel="noreferrer"><img src="images/precedent-anatomy-ai.jpg" alt="Anatomy of an AI System diagram"><span class="caption"><strong>Anatomy of an AI System</strong><small>Kate Crawford &amp; Vladan Joler ↗</small></span></a>
             <a class="image-card roulette-card" href="https://paglen.studio/2020/04/29/imagenet-roulette/" target="_blank" rel="noreferrer"><img src="images/contemporaries-crawford-paglen-imagenet-roulette.jpg" alt="ImageNet Roulette identifying two people with machine-generated labels"><span class="caption"><strong>ImageNet Roulette</strong><small>Kate Crawford &amp; Trevor Paglen ↗</small></span></a>
@@ -220,6 +221,7 @@
     <span id="layoutStatus" aria-live="polite"></span>
   </div>
   <p class="keyboard-note">Use ↑ and ↓ to present · E edits image layout</p>
+  <script src="pixel-map-test.js"></script>
   <script src="presentation.js"></script>
 </body>
 </html>

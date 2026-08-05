@@ -308,6 +308,7 @@
     current = index;
     slides[current].classList.add('is-active');
     slides[current].progressDot.classList.add('is-active');
+    if (current === 0 && typeof window.restartOpeningPixelMap === 'function') window.restartOpeningPixelMap();
     plane.style.transform = `translate3d(0,${-current * 100}vh,0)`;
     prev.disabled = current === 0;
     next.disabled = current === slides.length - 1;

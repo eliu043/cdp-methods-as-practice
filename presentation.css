@@ -29,7 +29,10 @@ button { font:inherit; }
 .slide h2 { max-width:21ch; margin:0; font-size:clamp(34px,3.75vw,60px); font-weight:400; line-height:1.01; letter-spacing:-.044em; }
 .lead { max-width:48ch; margin:18px 0 0; font-size:clamp(14px,1.15vw,18px); line-height:1.33; }
 .slide-question { position:absolute; left:0; bottom:0; z-index:9; max-width:34ch; margin:0; color:var(--muted); font-family:Georgia,'Times New Roman',serif; font-size:clamp(14px,1.12vw,18px); font-style:italic; line-height:1.25; }
-.slide-cover .slide-grid { grid-template-rows:auto 1fr auto; }
+.slide-cover .slide-grid { z-index:2; grid-template-rows:auto 1fr auto; }
+.opening-map,.opening-map-veil { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+.opening-map { z-index:0; background:#2f3926; opacity:.28; }
+.opening-map-veil { z-index:1; background:linear-gradient(90deg,rgba(244,243,239,.78),rgba(244,243,239,.48) 42%,rgba(244,243,239,.2)); }
 .slide-cover .eyebrow { grid-column:1 / 4; }
 .cover-title { grid-column:1 / 4; grid-row:2; align-self:center; }
 .cover-title h1 { margin:0; font-size:clamp(82px,13.8vw,220px); font-weight:400; line-height:.72; letter-spacing:-.075em; }
@@ -128,7 +131,6 @@ button { font:inherit; }
 .recursion-steps article { display:grid; grid-template-columns:70px 1fr; gap:12px; padding-top:8px; border-top:1px solid var(--line); font-size:10px; line-height:1.35; }
 .recursion-steps b { font-weight:400; text-transform:uppercase; letter-spacing:.06em; font-size:9px; }
 .recursion-steps span { color:var(--muted); }
-.recursion-caveat { position:absolute; left:0; bottom:0; width:30%; margin:0; color:var(--muted); font-size:9px; line-height:1.4; }
 .recursion-collage { inset:4% 0 4% 36%; }
 .anatomy-card { right:0; top:0; width:min(42vw,640px); }
 .anatomy-card img { aspect-ratio:1.75/1; }
@@ -136,7 +138,7 @@ button { font:inherit; }
 .roulette-card img { aspect-ratio:1.48/1; }
 .khan-card { right:0; top:54%; z-index:2; width:min(13vw,195px); }
 .khan-card img { aspect-ratio:1/1; }
-.slide-recursion .slide-question { left:auto; right:0; bottom:0; max-width:42ch; text-align:right; }
+.slide-recursion .recursion-khan-question { left:0; right:auto; bottom:0; width:30%; max-width:42ch; text-align:left; }
 
 /* Glitch and spectrum */
 .slide-spectrum .slide-heading { max-width:720px; }
@@ -208,6 +210,7 @@ body.layout-editing .layout-resize-handle { display:block!important; }
   .slide h2 { font-size:clamp(32px,7.6vw,54px); }
   .cover-title h1 { font-size:22vw; }
   .cover-title p { margin-left:0; }
+  .opening-map-veil { background:linear-gradient(90deg,rgba(244,243,239,.7),rgba(244,243,239,.28)); }
   .cover-note { grid-column:2; }
   .forecast-collage,.sensing-collage,.recursion-collage { inset:30% 0 9% 32%; opacity:.44; }
   .forecast-map,.sensing-ground,.anatomy-card { width:62vw; }
@@ -239,8 +242,8 @@ body.layout-editing .layout-resize-handle { display:block!important; }
   .book-tsing { left:34%; }
   .alchemy-line { width:46%; }
   .alchemy-bridge { display:none; }
-  .recursion-steps,.recursion-caveat { width:45%; }
-  .slide-recursion .slide-question { width:48%; }
+  .recursion-steps { width:45%; }
+  .slide-recursion .recursion-khan-question { width:45%; }
   .spectrum-terms { width:38%; }
   .spectrum-collage { left:42%; opacity:.52; }
   .glitch-image { width:58vw; }
